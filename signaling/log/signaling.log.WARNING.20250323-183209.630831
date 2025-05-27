@@ -1,0 +1,60 @@
+Log file created at: 2025/03/23 18:32:09
+Running on machine: hcss-ecs-6477
+Binary: Built with gc go1.23.2 for linux/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0323 18:32:09.146932  630831 log.go:95] logId[69415499] url[/signaling/sendanswer] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=888&streamName=666&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.36] clientIP[122.9.169.241:64963] realClientIP[122.9.169.241:64963] type[push] uid[888] streamName[666] answer[v=0
+o=- 6692944220711690246 2 IN IP4 127.0.0.1
+s=-
+t=0 0
+a=group:BUNDLE audio video
+a=msid-semantic: WMS dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9
+m=audio 9 UDP/TLS/RTP/SAVPF 111
+c=IN IP4 0.0.0.0
+a=rtcp:9 IN IP4 0.0.0.0
+a=ice-ufrag:VKMX
+a=ice-pwd:VjR/8i+Onj61qkQtpGZHhvsa
+a=ice-options:trickle
+a=fingerprint:sha-256 00:3C:E6:13:F7:12:EE:9C:96:91:8C:13:79:E8:5D:7C:70:77:27:4A:CF:0E:6C:AC:AA:3D:A7:5B:BF:4C:EA:C9
+a=setup:active
+a=mid:audio
+a=sendonly
+a=msid:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9 a3be633f-6069-4275-b075-fb0c57266106
+a=rtcp-mux
+a=rtpmap:111 opus/48000/2
+a=rtcp-fb:111 transport-cc
+a=fmtp:111 minptime=10;useinbandfec=1
+a=ssrc:2334721124 cname:iH5a4BBlkk451EDJ
+a=ssrc:2334721124 msid:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9 a3be633f-6069-4275-b075-fb0c57266106
+a=ssrc:2334721124 mslabel:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9
+a=ssrc:2334721124 label:a3be633f-6069-4275-b075-fb0c57266106
+m=video 9 UDP/TLS/RTP/SAVPF 107 99
+c=IN IP4 0.0.0.0
+a=rtcp:9 IN IP4 0.0.0.0
+a=ice-ufrag:VKMX
+a=ice-pwd:VjR/8i+Onj61qkQtpGZHhvsa
+a=ice-options:trickle
+a=fingerprint:sha-256 00:3C:E6:13:F7:12:EE:9C:96:91:8C:13:79:E8:5D:7C:70:77:27:4A:CF:0E:6C:AC:AA:3D:A7:5B:BF:4C:EA:C9
+a=setup:active
+a=mid:video
+a=sendonly
+a=msid:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9 b2863e81-80b3-4cf9-9751-590f66536172
+a=rtcp-mux
+a=rtpmap:107 h264/90000
+a=rtcp-fb:107 goog-remb
+a=rtcp-fb:107 transport-cc
+a=rtcp-fb:107 ccm fir
+a=rtcp-fb:107 nack
+a=rtcp-fb:107 nack pli
+a=fmtp:107 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f
+a=rtpmap:99 rtx/90000
+a=fmtp:99 apt=107
+a=ssrc-group:FID 433002291 2323408786
+a=ssrc:433002291 cname:iH5a4BBlkk451EDJ
+a=ssrc:433002291 msid:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9 b2863e81-80b3-4cf9-9751-590f66536172
+a=ssrc:433002291 mslabel:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9
+a=ssrc:433002291 label:b2863e81-80b3-4cf9-9751-590f66536172
+a=ssrc:2323408786 cname:iH5a4BBlkk451EDJ
+a=ssrc:2323408786 msid:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9 b2863e81-80b3-4cf9-9751-590f66536172
+a=ssrc:2323408786 mslabel:dxGH3M4xXH5rjC5bKwBGbtXa5YuKTd2zveS9
+a=ssrc:2323408786 label:b2863e81-80b3-4cf9-9751-590f66536172
+] errNo[-2] errMsg[backend process error: read tcp 127.0.0.1:33722->127.0.0.1:9000: i/o timeout] request process failed

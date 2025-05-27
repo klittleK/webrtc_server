@@ -1,0 +1,5 @@
+Log file created at: 2025/02/23 15:38:59
+Running on machine: hcss-ecs-6477
+Binary: Built with gc go1.23.2 for linux/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0223 15:38:59.989021 3200188 log.go:95] logId[760124511] url[/signaling/push] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=888&streamName=666&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0] clientIP[122.9.168.63:52617] realClientIP[122.9.168.63:52617] uid[888] streamName[666] audio[1] video[1] errNo[-2] errMsg[backend process error: json: Unmarshal(non-pointer action.xrtcPushResp)] request process failed

@@ -1,0 +1,6 @@
+Log file created at: 2025/04/27 12:02:49
+Running on machine: hcss-ecs-6477
+Binary: Built with gc go1.23.2 for linux/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0427 12:02:49.073538 3431777 log.go:95] logId[1129255857] url[/signaling/push] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=888&streamName=666&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.36] clientIP[122.9.169.94:54884] realClientIP[122.9.169.94:54884] audio[1] video[1] uid[888] streamName[666] errNo[-2] errMsg[backend process error: read tcp 127.0.0.1:56174->127.0.0.1:9000: i/o timeout] request process failed
+W0427 12:03:04.640007 3431777 log.go:95] logId[3989100606] url[/signaling/push] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=888&streamName=666&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.36] clientIP[122.9.169.94:54884] realClientIP[122.9.169.94:54884] streamName[666] audio[1] video[1] uid[888] errNo[-2] errMsg[backend process error: read tcp 127.0.0.1:56244->127.0.0.1:9000: i/o timeout] request process failed

@@ -1,0 +1,11 @@
+prefix=/root/dev/lib/yaml-cpp
+exec_prefix=${prefix}
+includedir=/root/dev/lib/yaml-cpp/include
+libdir=/root/dev/lib/yaml-cpp/lib
+
+Name: Yaml-cpp
+Description: A YAML parser and emitter for C++
+Version: 0.8.0
+Requires:
+Libs: -L${libdir} -lyaml-cpp
+Cflags: -I${includedir}

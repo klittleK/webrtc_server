@@ -1,0 +1,55 @@
+Log file created at: 2025/05/13 15:37:23
+Running on machine: hcss-ecs-6477
+Binary: Built with gc go1.23.2 for linux/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I0513 15:37:23.857699   12387 http_server.go:97] start https server on port: 8081
+I0513 15:37:23.857797   12387 http_server.go:92] start http server on port: 8080
+I0513 15:37:32.877556   12387 log.go:90] logId[699194784] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36] clientIP[114.254.0.209:59985] realClientIP[114.254.0.209:59985] video[1] uid[123] streamName[888] audio[1] totalCost[0.180ms]
+I0513 15:37:35.275284   12387 log.go:90] logId[863246464] url[/signaling/push] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=123&streamName=888&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36] clientIP[114.254.0.209:59985] realClientIP[114.254.0.209:59985] uid[123] streamName[888] audio[1] video[1] resp[{"errNo":0,"errMsg":"success","data":{"type":"offer","sdp":"v=0\r\no=- 0 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE audio video\r\na=msid-semantic: WMS\r\nm=audio 9 UDP/TLS/RTP/SAVPF 111\r\nc=IN IP4 0.0.0.0\r\na=rtcp:9 IN IP4 0.0.0.0\r\na=candidate:3553391888 1 udp 2113937151 123.60.30.56 1025 typ host\r\na=ice-ufrag:TbjO\r\na=ice-pwd:rBjpRwnEHpNFdcYvvqh8OWSP\r\na=fingerprint:sha-256 B5:55:49:37:49:AC:3A:A9:F4:E1:78:49:F7:BA:7F:F6:1F:C2:60:3D:FB:45:8B:FD:85:4B:16:EA:E3:6C:B4:2E\r\na=setup:actpass\r\na=mid:audio\r\na=recvonly\r\na=rtcp-mux\r\na=rtpmap:111 opus/48000/2\r\na=rtcp-fb:111 transport-cc\r\na=fmtp:111 minptime=10;useinbandfec=1\r\nm=video 9 UDP/TLS/RTP/SAVPF 107 99\r\nc=IN IP4 0.0.0.0\r\na=rtcp:9 IN IP4 0.0.0.0\r\na=ice-ufrag:TbjO\r\na=ice-pwd:rBjpRwnEHpNFdcYvvqh8OWSP\r\na=fingerprint:sha-256 B5:55:49:37:49:AC:3A:A9:F4:E1:78:49:F7:BA:7F:F6:1F:C2:60:3D:FB:45:8B:FD:85:4B:16:EA:E3:6C:B4:2E\r\na=setup:actpass\r\na=mid:video\r\na=recvonly\r\na=rtcp-mux\r\na=rtpmap:107 h264/90000\r\na=rtcp-fb:107 goog-remb\r\na=rtcp-fb:107 transport-cc\r\na=rtcp-fb:107 ccm fir\r\na=rtcp-fb:107 nack\r\na=rtcp-fb:107 nack pli\r\na=fmtp:107 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f\r\na=rtpmap:99 rtx/90000\r\na=fmtp:99 apt=107\r\n"}}] totalCost[0.874ms]
+I0513 15:37:39.829787   12387 log.go:90] logId[767242288] url[/signaling/sendanswer] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=123&streamName=888&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36] clientIP[114.254.0.209:59985] realClientIP[114.254.0.209:59985] streamName[888] answer[v=0
+o=- 5312963020491832443 2 IN IP4 127.0.0.1
+s=-
+t=0 0
+a=group:BUNDLE audio video
+a=msid-semantic: WMS 3084b6a9-2479-4b33-a6c1-39398f9f22d2
+m=audio 9 UDP/TLS/RTP/SAVPF 111
+c=IN IP4 0.0.0.0
+a=rtcp:9 IN IP4 0.0.0.0
+a=ice-ufrag:IFTf
+a=ice-pwd:EKGuH+PqNH0wtHxBH3BgugoW
+a=ice-options:trickle
+a=fingerprint:sha-256 F8:FD:82:0F:9E:72:18:42:D5:5F:44:85:9D:8F:1F:66:71:C3:A9:49:89:E5:D0:39:E6:19:1D:49:FB:6C:56:26
+a=setup:active
+a=mid:audio
+a=sendonly
+a=msid:3084b6a9-2479-4b33-a6c1-39398f9f22d2 aad51a95-2498-41f9-b9f8-a4578c67dd8b
+a=rtcp-mux
+a=rtpmap:111 opus/48000/2
+a=rtcp-fb:111 transport-cc
+a=fmtp:111 minptime=10;useinbandfec=1
+a=ssrc:506292735 cname:k/rurVkI6+L1ff8M
+m=video 9 UDP/TLS/RTP/SAVPF 107 99
+c=IN IP4 0.0.0.0
+a=rtcp:9 IN IP4 0.0.0.0
+a=ice-ufrag:IFTf
+a=ice-pwd:EKGuH+PqNH0wtHxBH3BgugoW
+a=ice-options:trickle
+a=fingerprint:sha-256 F8:FD:82:0F:9E:72:18:42:D5:5F:44:85:9D:8F:1F:66:71:C3:A9:49:89:E5:D0:39:E6:19:1D:49:FB:6C:56:26
+a=setup:active
+a=mid:video
+a=sendonly
+a=msid:3084b6a9-2479-4b33-a6c1-39398f9f22d2 867841a9-ee61-4d67-ae15-1c4e018192db
+a=rtcp-mux
+a=rtpmap:107 h264/90000
+a=rtcp-fb:107 goog-remb
+a=rtcp-fb:107 transport-cc
+a=rtcp-fb:107 ccm fir
+a=rtcp-fb:107 nack
+a=rtcp-fb:107 nack pli
+a=fmtp:107 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f
+a=rtpmap:99 rtx/90000
+a=fmtp:99 apt=107
+a=ssrc-group:FID 1616969426 174819750
+a=ssrc:1616969426 cname:k/rurVkI6+L1ff8M
+a=ssrc:174819750 cname:k/rurVkI6+L1ff8M
+] type[push] uid[123] resp[{"errNo":0,"errMsg":"success","data":null}] totalCost[0.638ms]

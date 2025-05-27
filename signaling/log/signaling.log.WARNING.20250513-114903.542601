@@ -1,0 +1,5 @@
+Log file created at: 2025/05/13 11:49:03
+Running on machine: hcss-ecs-6477
+Binary: Built with gc go1.23.2 for linux/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0513 11:49:03.482901  542601 log.go:95] logId[4178693990] url[/signaling/push] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=123&streamName=888&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36] clientIP[111.206.94.147:46229] realClientIP[111.206.94.147:46229] uid[123] streamName[888] audio[1] video[1] errNo[-2] errMsg[backend process error: dial tcp 127.0.0.1:9000: connect: connection refused] request process failed
