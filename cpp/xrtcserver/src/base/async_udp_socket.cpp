@@ -93,7 +93,7 @@ void xrtc::AsyncUdpSocket::send_data() {
             return;
         } else if (sent == 0) {
             RTC_LOG(LS_WARNING) << "send 0 bytes, try again, remote_addr: " << packet->addr().ToString();
-            return;  // 发送了0字节，可能是连接关闭或其他错误
+            return;  // 发送了0字节
         } else {
             delete packet;  // 发送成功，删除该包
             _udp_packet_list.pop_front();
@@ -111,6 +111,44 @@ int AsyncUdpSocket::send_to(const char* data, size_t size, const rtc::SocketAddr
 }
 
 int AsyncUdpSocket::_add_udp_packet(const char* data, size_t size, const rtc::SocketAddress& addr) {
+    // 尝试发list里的数据，能直接发就发了
+    size_t len = 0;
+    int sent = 0;
+    while (!_udp_packet_list.empty()) {
+        // 从队列中取出一个UDP包进行发送
+        UdpPacketData* packet = _udp_packet_list.front();
+        sockaddr_storage saddr;
+        len = packet->addr().ToSockAddrStorage(&saddr);
+        sent = sock_send_to(_socket, packet->data(), packet->size(), MSG_NOSIGNAL, (struct sockaddr*)&saddr, len);
+        if (sent < 0) {
+            RTC_LOG(LS_WARNING) << "send udp packet error, remote_addr: " << packet->addr().ToString();
+            delete packet;  // 发送失败，删除该包
+            _udp_packet_list.pop_front();
+            return -1;
+        } else if (sent == 0) {
+            RTC_LOG(LS_WARNING) << "send 0 bytes, try again, remote_addr: " << packet->addr().ToString();
+            goto SEND_AGAIN;
+        } else {
+            delete packet;  // 发送成功，删除该包
+            _udp_packet_list.pop_front();
+        }
+    }
+
+    // 发送当前数据
+    sockaddr_storage saddr;
+    len = addr.ToSockAddrStorage(&saddr);
+    sent = sock_send_to(_socket, data, size, MSG_NOSIGNAL, (struct sockaddr*)&saddr, len);
+    if (sent < 0) {
+        RTC_LOG(LS_WARNING) << "send udp packet error, remote_addr: " << addr.ToString();
+        return -1;  // 发送失败
+    } else if (sent == 0) {
+        RTC_LOG(LS_WARNING) << "send 0 bytes, try again, remote_addr: " << addr.ToString();
+        goto SEND_AGAIN;  // 发送了0字节，重新加入队列
+    }
+
+    return sent;
+
+SEND_AGAIN:
     UdpPacketData* udp_packet = new UdpPacketData(data, size, addr);
     _udp_packet_list.push_back(udp_packet);
     _el->start_io_event(_socket_watcher, _socket, EventLoop::WRITE);

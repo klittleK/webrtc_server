@@ -213,6 +213,8 @@ CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o: \
  /usr/include/c++/11/bits/shared_ptr_atomic.h \
  /usr/include/c++/11/backward/auto_ptr.h \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/string_to_number.h \
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/time_utils.h \
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/system_time.h \
  /root/dev/cpp/xrtcserver/./src/ice/ice_transport_channel.h \
  /root/dev/cpp/xrtcserver/./src/base/event_loop.h \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/third_party/sigslot/sigslot.h \
@@ -256,8 +258,11 @@ CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o: \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/byte_buffer.h \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/buffer.h \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/zero_memory.h \
- /root/dev/cpp/xrtcserver/./src/ice/udp_port.h /usr/include/c++/11/map \
- /usr/include/c++/11/bits/stl_map.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_controller.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection.h \
+ /root/dev/cpp/xrtcserver/./src/ice/stun_request.h \
+ /usr/include/c++/11/map /usr/include/c++/11/bits/stl_map.h \
  /usr/include/c++/11/bits/stl_multimap.h \
- /root/dev/cpp/xrtcserver/./src/base/async_udp_socket.h \
- /root/dev/cpp/xrtcserver/./src/ice/ice_connection.h
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection_info.h \
+ /root/dev/cpp/xrtcserver/./src/ice/udp_port.h \
+ /root/dev/cpp/xrtcserver/./src/base/async_udp_socket.h

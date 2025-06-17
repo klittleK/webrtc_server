@@ -1,8 +1,0 @@
-Log file created at: 2025/02/13 10:05:31
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I0213 10:05:31.284270 2762389 log.go:53] logId[1334569106] 
-I0213 10:05:38.087417 2762389 log.go:53] logId[1732420763] 
-I0213 10:05:58.961933 2762389 log.go:53] logId[674284087] 
-I0213 10:06:46.795355 2762389 log.go:53] logId[1421533284] 

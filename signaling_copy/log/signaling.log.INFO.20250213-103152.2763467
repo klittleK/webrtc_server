@@ -1,5 +1,0 @@
-Log file created at: 2025/02/13 10:31:52
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I0213 10:31:52.593753 2763467 log.go:53] logId[1158262371] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0] clientIP[122.9.169.73:50199] realClientIP[122.9.169.73:50199] video[1] uid[888] streamName[666] audio[1] 

@@ -195,10 +195,24 @@ CMakeFiles/xrtcserver.dir/src/ice/ice_connection.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xrtcserver.dir/src/ice/ice_connection.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/dev/cpp/xrtcserver/src/ice/ice_connection.cpp -o CMakeFiles/xrtcserver.dir/src/ice/ice_connection.cpp.s
 
+CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
+CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o: ../src/ice/ice_controller.cpp
+CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/ice_controller.cpp
+
+CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/dev/cpp/xrtcserver/src/ice/ice_controller.cpp > CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.i
+
+CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/dev/cpp/xrtcserver/src/ice/ice_controller.cpp -o CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.s
+
 CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o: ../src/ice/ice_credentials.cpp
 CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/ice_credentials.cpp
 
 CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.i: cmake_force
@@ -212,7 +226,7 @@ CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o: ../src/ice/ice_def.cpp
 CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/ice_def.cpp
 
 CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.i: cmake_force
@@ -226,7 +240,7 @@ CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o: ../src/ice/ice_transport_channel.cpp
 CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/ice_transport_channel.cpp
 
 CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.i: cmake_force
@@ -240,7 +254,7 @@ CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o: ../src/ice/port_allocator.cpp
 CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/port_allocator.cpp
 
 CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.i: cmake_force
@@ -254,7 +268,7 @@ CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o: ../src/ice/stun.cpp
 CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/stun.cpp
 
 CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.i: cmake_force
@@ -265,10 +279,24 @@ CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/dev/cpp/xrtcserver/src/ice/stun.cpp -o CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.s
 
+CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
+CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o: ../src/ice/stun_request.cpp
+CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/stun_request.cpp
+
+CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/dev/cpp/xrtcserver/src/ice/stun_request.cpp > CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.i
+
+CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/dev/cpp/xrtcserver/src/ice/stun_request.cpp -o CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.s
+
 CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o: ../src/ice/udp_port.cpp
 CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o -MF CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o -c /root/dev/cpp/xrtcserver/src/ice/udp_port.cpp
 
 CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.i: cmake_force
@@ -282,7 +310,7 @@ CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/main.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/xrtcserver.dir/src/main.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/xrtcserver.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/xrtcserver.dir/src/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/main.cpp.o -MF CMakeFiles/xrtcserver.dir/src/main.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/main.cpp.o -c /root/dev/cpp/xrtcserver/src/main.cpp
 
 CMakeFiles/xrtcserver.dir/src/main.cpp.i: cmake_force
@@ -293,10 +321,24 @@ CMakeFiles/xrtcserver.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xrtcserver.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/dev/cpp/xrtcserver/src/main.cpp -o CMakeFiles/xrtcserver.dir/src/main.cpp.s
 
+CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
+CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o: ../src/pc/dtls_transport.cpp
+CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o -MF CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o -c /root/dev/cpp/xrtcserver/src/pc/dtls_transport.cpp
+
+CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/dev/cpp/xrtcserver/src/pc/dtls_transport.cpp > CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.i
+
+CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/dev/cpp/xrtcserver/src/pc/dtls_transport.cpp -o CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.s
+
 CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o: ../src/pc/peer_connection.cpp
 CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o -MF CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o -c /root/dev/cpp/xrtcserver/src/pc/peer_connection.cpp
 
 CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.i: cmake_force
@@ -310,7 +352,7 @@ CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o: ../src/pc/session_description.cpp
 CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o -MF CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o -c /root/dev/cpp/xrtcserver/src/pc/session_description.cpp
 
 CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.i: cmake_force
@@ -324,7 +366,7 @@ CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o: ../src/pc/transport_controller.cpp
 CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o -MF CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o -c /root/dev/cpp/xrtcserver/src/pc/transport_controller.cpp
 
 CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.i: cmake_force
@@ -338,7 +380,7 @@ CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o: ../src/server/rtc_server.cpp
 CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o -MF CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.o -c /root/dev/cpp/xrtcserver/src/server/rtc_server.cpp
 
 CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.i: cmake_force
@@ -352,7 +394,7 @@ CMakeFiles/xrtcserver.dir/src/server/rtc_server.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o: ../src/server/rtc_worker.cpp
 CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o -MF CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.o -c /root/dev/cpp/xrtcserver/src/server/rtc_worker.cpp
 
 CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.i: cmake_force
@@ -366,7 +408,7 @@ CMakeFiles/xrtcserver.dir/src/server/rtc_worker.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o: ../src/server/signaling_server.cpp
 CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o -MF CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.o -c /root/dev/cpp/xrtcserver/src/server/signaling_server.cpp
 
 CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.i: cmake_force
@@ -380,7 +422,7 @@ CMakeFiles/xrtcserver.dir/src/server/signaling_server.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o: ../src/server/signaling_worker.cpp
 CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o -MF CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.o -c /root/dev/cpp/xrtcserver/src/server/signaling_worker.cpp
 
 CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.i: cmake_force
@@ -394,7 +436,7 @@ CMakeFiles/xrtcserver.dir/src/server/signaling_worker.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o: ../src/server/tcp_connection.cpp
 CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o -MF CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.o -c /root/dev/cpp/xrtcserver/src/server/tcp_connection.cpp
 
 CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.i: cmake_force
@@ -408,7 +450,7 @@ CMakeFiles/xrtcserver.dir/src/server/tcp_connection.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o: ../src/stream/push_stream.cpp
 CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o -MF CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o -c /root/dev/cpp/xrtcserver/src/stream/push_stream.cpp
 
 CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.i: cmake_force
@@ -422,7 +464,7 @@ CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o: ../src/stream/rtc_stream.cpp
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o -MF CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o -c /root/dev/cpp/xrtcserver/src/stream/rtc_stream.cpp
 
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.i: cmake_force
@@ -436,7 +478,7 @@ CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.s: cmake_force
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o: CMakeFiles/xrtcserver.dir/flags.make
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o: ../src/stream/rtc_stream_manager.cpp
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o: CMakeFiles/xrtcserver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o -MF CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o.d -o CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o -c /root/dev/cpp/xrtcserver/src/stream/rtc_stream_manager.cpp
 
 CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.i: cmake_force
@@ -458,13 +500,16 @@ xrtcserver_OBJECTS = \
 "CMakeFiles/xrtcserver.dir/src/ice/candidate.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/ice_agent.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/ice_connection.cpp.o" \
+"CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o" \
+"CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/main.cpp.o" \
+"CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o" \
 "CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o" \
@@ -489,13 +534,16 @@ xrtcserver: CMakeFiles/xrtcserver.dir/src/base/socket.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/candidate.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/ice_agent.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/ice_connection.cpp.o
+xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/ice_credentials.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/ice_def.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/ice_transport_channel.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/port_allocator.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.o
+xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/ice/udp_port.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/main.cpp.o
+xrtcserver: CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/pc/session_description.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/pc/transport_controller.cpp.o
@@ -509,7 +557,7 @@ xrtcserver: CMakeFiles/xrtcserver.dir/src/stream/rtc_stream.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o
 xrtcserver: CMakeFiles/xrtcserver.dir/build.make
 xrtcserver: CMakeFiles/xrtcserver.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Linking CXX executable xrtcserver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/dev/cpp/xrtcserver/out/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Linking CXX executable xrtcserver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/xrtcserver.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

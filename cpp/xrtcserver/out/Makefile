@@ -345,6 +345,30 @@ src/ice/ice_connection.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/ice_connection.cpp.s
 .PHONY : src/ice/ice_connection.cpp.s
 
+src/ice/ice_controller.o: src/ice/ice_controller.cpp.o
+.PHONY : src/ice/ice_controller.o
+
+# target to build an object file
+src/ice/ice_controller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.o
+.PHONY : src/ice/ice_controller.cpp.o
+
+src/ice/ice_controller.i: src/ice/ice_controller.cpp.i
+.PHONY : src/ice/ice_controller.i
+
+# target to preprocess a source file
+src/ice/ice_controller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.i
+.PHONY : src/ice/ice_controller.cpp.i
+
+src/ice/ice_controller.s: src/ice/ice_controller.cpp.s
+.PHONY : src/ice/ice_controller.s
+
+# target to generate assembly for a file
+src/ice/ice_controller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/ice_controller.cpp.s
+.PHONY : src/ice/ice_controller.cpp.s
+
 src/ice/ice_credentials.o: src/ice/ice_credentials.cpp.o
 .PHONY : src/ice/ice_credentials.o
 
@@ -465,6 +489,30 @@ src/ice/stun.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/stun.cpp.s
 .PHONY : src/ice/stun.cpp.s
 
+src/ice/stun_request.o: src/ice/stun_request.cpp.o
+.PHONY : src/ice/stun_request.o
+
+# target to build an object file
+src/ice/stun_request.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.o
+.PHONY : src/ice/stun_request.cpp.o
+
+src/ice/stun_request.i: src/ice/stun_request.cpp.i
+.PHONY : src/ice/stun_request.i
+
+# target to preprocess a source file
+src/ice/stun_request.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.i
+.PHONY : src/ice/stun_request.cpp.i
+
+src/ice/stun_request.s: src/ice/stun_request.cpp.s
+.PHONY : src/ice/stun_request.s
+
+# target to generate assembly for a file
+src/ice/stun_request.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/ice/stun_request.cpp.s
+.PHONY : src/ice/stun_request.cpp.s
+
 src/ice/udp_port.o: src/ice/udp_port.cpp.o
 .PHONY : src/ice/udp_port.o
 
@@ -512,6 +560,30 @@ src/main.s: src/main.cpp.s
 src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
+
+src/pc/dtls_transport.o: src/pc/dtls_transport.cpp.o
+.PHONY : src/pc/dtls_transport.o
+
+# target to build an object file
+src/pc/dtls_transport.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.o
+.PHONY : src/pc/dtls_transport.cpp.o
+
+src/pc/dtls_transport.i: src/pc/dtls_transport.cpp.i
+.PHONY : src/pc/dtls_transport.i
+
+# target to preprocess a source file
+src/pc/dtls_transport.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.i
+.PHONY : src/pc/dtls_transport.cpp.i
+
+src/pc/dtls_transport.s: src/pc/dtls_transport.cpp.s
+.PHONY : src/pc/dtls_transport.s
+
+# target to generate assembly for a file
+src/pc/dtls_transport.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/xrtcserver.dir/build.make CMakeFiles/xrtcserver.dir/src/pc/dtls_transport.cpp.s
+.PHONY : src/pc/dtls_transport.cpp.s
 
 src/pc/peer_connection.o: src/pc/peer_connection.cpp.o
 .PHONY : src/pc/peer_connection.o
@@ -813,6 +885,9 @@ help:
 	@echo "... src/ice/ice_connection.o"
 	@echo "... src/ice/ice_connection.i"
 	@echo "... src/ice/ice_connection.s"
+	@echo "... src/ice/ice_controller.o"
+	@echo "... src/ice/ice_controller.i"
+	@echo "... src/ice/ice_controller.s"
 	@echo "... src/ice/ice_credentials.o"
 	@echo "... src/ice/ice_credentials.i"
 	@echo "... src/ice/ice_credentials.s"
@@ -828,12 +903,18 @@ help:
 	@echo "... src/ice/stun.o"
 	@echo "... src/ice/stun.i"
 	@echo "... src/ice/stun.s"
+	@echo "... src/ice/stun_request.o"
+	@echo "... src/ice/stun_request.i"
+	@echo "... src/ice/stun_request.s"
 	@echo "... src/ice/udp_port.o"
 	@echo "... src/ice/udp_port.i"
 	@echo "... src/ice/udp_port.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/pc/dtls_transport.o"
+	@echo "... src/pc/dtls_transport.i"
+	@echo "... src/pc/dtls_transport.s"
 	@echo "... src/pc/peer_connection.o"
 	@echo "... src/pc/peer_connection.i"
 	@echo "... src/pc/peer_connection.s"

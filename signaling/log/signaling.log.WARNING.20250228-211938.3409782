@@ -1,5 +1,0 @@
-Log file created at: 2025/02/28 21:19:38
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-W0228 21:19:38.201355 3409782 log.go:95] logId[2575092565] url[/signaling/push] referer[https://lkbstream.cn:8081/xrtcclient/push] cookie[] ua[Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36] clientIP[101.87.49.109:57146] realClientIP[101.87.49.109:57146] audio[] video[] uid[] streamName[] errNo[-1] errMsg[parse uid error: strconv.ParseUint: parsing "": invalid syntax] request process failed

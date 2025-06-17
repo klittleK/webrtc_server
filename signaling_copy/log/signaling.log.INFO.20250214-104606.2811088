@@ -1,6 +1,0 @@
-Log file created at: 2025/02/14 10:46:06
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I0214 10:46:06.897452 2811088 http_server.go:97] start https server on port: 8081
-I0214 10:46:06.898084 2811088 http_server.go:92] start http server on port: 8080

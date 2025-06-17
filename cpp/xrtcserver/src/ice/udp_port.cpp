@@ -100,6 +100,13 @@ IceConnection *UDPPort::get_connection(const rtc::SocketAddress &addr) {
     return iter == _connections.end() ? nullptr : iter->second;
 }
 
+void UDPPort::create_stun_username(const std::string &remote_username, std::string *stun_attr_username) {
+    stun_attr_username->clear();
+    *stun_attr_username = remote_username;
+    stun_attr_username->append(":");
+    stun_attr_username->append(_ice_params.ice_ufrag);
+}
+
 int xrtc::UDPPort::send_to(const char *buf, size_t len, const rtc::SocketAddress &addr) {
     if (!_async_socket) {
         return -1;
@@ -109,6 +116,7 @@ int xrtc::UDPPort::send_to(const char *buf, size_t len, const rtc::SocketAddress
 }
 
 void UDPPort::_on_read_packet(AsyncUdpSocket *socket, char *buf, size_t size, const rtc::SocketAddress &addr, int64_t ts) {
+    // 从第二个bind request包开始，才会有addr
     if (IceConnection* conn = get_connection(addr)) {
         conn->on_read_packet(buf, size, ts);
         return;
@@ -210,7 +218,42 @@ std::string UDPPort::to_string() {
     return ss.str();
 }
 
-void UDPPort::send_binding_error_response(StunMessage *stun_msg, const rtc::SocketAddress& addr, int error_code, const std::string &reason) {
+void UDPPort::send_binding_error_response(StunMessage *stun_msg, const rtc::SocketAddress& addr, int err_code, const std::string &reason) {
+    if (!_async_socket) {
+        return;
+    }
+
+    StunMessage response;
+    response.set_type(STUN_BINDING_ERROR_RESPONSE);
+    response.set_transaction_id(stun_msg->transaction_id());
+    auto error_attr = StunAttribute::create_error_code();
+    error_attr->set_code(err_code);
+    error_attr->set_reason(reason);
+    response.add_attribute(std::move(error_attr));
+
+    if (err_code != STUN_ERROR_BAD_REQUEST && err_code != STUN_ERROR_UNAUTHORIZED) {
+        response.add_message_integrity(_ice_params.ice_pwd);
+    }
+
+    response.add_fingerprint();
+
+    rtc::ByteBufferWriter buf;
+    if (!response.write(&buf)) {
+        return;
+    }
+
+    int ret = _async_socket->send_to(buf.Data(), buf.Length(), addr);
+    if (ret < 0) {
+        RTC_LOG(LS_WARNING) << to_string() << " send "
+            << stun_method_to_string(response.type())
+            << "error, ret=" << ret
+            << " to " << addr.ToString();            
+    } else {
+        RTC_LOG(LS_INFO) << to_string() << " sent "
+            << stun_method_to_string(response.type())
+            << ", reason=" << reason
+            << " to " << addr.ToString();
+    }
 
 }
 

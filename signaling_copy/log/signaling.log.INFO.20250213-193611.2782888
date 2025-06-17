@@ -1,7 +1,0 @@
-Log file created at: 2025/02/13 19:36:11
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I0213 19:36:11.200740 2782888 http_server.go:97] start https server on port: 8081
-I0213 19:36:11.201199 2782888 http_server.go:92] start http server on port: 8080
-I0213 19:36:14.034890 2782888 log.go:90] logId[3668105938] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0] clientIP[122.9.168.185:57753] realClientIP[122.9.168.185:57753] video[1] uid[888] streamName[666] audio[1] totalCost[0.193ms]

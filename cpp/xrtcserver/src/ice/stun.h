@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <rtc_base/byte_buffer.h>
+#include <rtc_base/socket_address.h>
 
 namespace xrtc {
 
@@ -15,18 +16,23 @@ const size_t k_stun_transaction_id_length = 12;
 const uint32_t k_stun_magic_cookie = 0x2112A442;
 const size_t k_stun_magic_cookie_length = sizeof(k_stun_magic_cookie);
 const size_t k_stun_message_integrity_size = 20;
+const uint32_t k_stun_type_mask = 0x0110;
 
 enum StunMessageType {
     STUN_BINDING_REQUEST = 0x0001,
-    STUN_BINDING_RESPONSE = 0x1001,
+    STUN_BINDING_RESPONSE = 0x0101,
+    STUN_BINDING_ERROR_RESPONSE = 0x0111,
 };
 
 enum StunAttributeType {
     STUN_ATTR_USERNAME = 0x0006,
     STUN_ATTR_MESSAGE_INTEGRITY = 0x0008,
+    STUN_ATTR_ERROR_CODE = 0x0009,
     STUN_ATTR_XOR_MAPPED_ADDRESS = 0x0020,
     STUN_ATTR_PRIORITY = 0x0024,
+    STUN_ATTR_USE_CANDIDATE = 0x0025,
     STUN_ATTR_FINGERPRINT = 0x8028,
+    STUN_ATTR_ICE_CONTROLLING = 0x802A,
 };
 
 enum StunAttributeValueType {
@@ -38,7 +44,9 @@ enum StunAttributeValueType {
 enum StunErrorCode {
     STUN_ERROR_BAD_REQUEST = 400,
     STUN_ERROR_UNAUTHORIZED = 401,
+    STUN_ERROR_UNKNOWN_ATTRIBUTE = 420,
     STUN_ERROR_SERVER_ERROR = 500,
+    STUN_ERROR_GLOABAL_FAIL = 600,
 };
 
 enum StunAddressFamily {
@@ -54,6 +62,7 @@ extern const char STUN_ERROR_REASON_SERVER_ERROR[];
 class StunAttribute;
 class StunByteStringAttribute;
 class StunUInt32Attribute;
+class StunErrorCodeAttribute;
 
 std::string stun_method_to_string(int type);
 
@@ -81,6 +90,8 @@ public:
 
     IntegrityStatus validate_message_integrity(const std::string& password);
     bool add_message_integrity(const std::string& password);
+    IntegrityStatus integrity() { return _integrity; }
+    bool integrity_ok() { return _integrity == IntegrityStatus::k_integrity_ok; }
 
     bool _add_message_integrity_of_type(uint16_t attr_type, uint16_t attr_size, const char *key, size_t key_len);
 
@@ -92,6 +103,8 @@ public:
 
     const StunUInt32Attribute* get_uint32(uint16_t type);
     const StunByteStringAttribute* get_byte_string(uint16_t type);
+    const StunErrorCodeAttribute* get_error_code();
+    int get_error_code_value();
 
 private:
     StunAttribute* _create_attribute(uint16_t type, uint16_t length);
@@ -119,6 +132,7 @@ public:
     void set_length(uint16_t length) { _length = length; }
 
     static StunAttribute* create(StunAttributeValueType value_type, uint16_t type, uint16_t length, void* owner);
+    static std::unique_ptr<StunErrorCodeAttribute> create_error_code();
 
     virtual bool read(rtc::ByteBufferReader* buf) = 0;
     virtual bool write(rtc::ByteBufferWriter* buf) = 0;
@@ -182,6 +196,24 @@ private:
 
 };
 
+class StunUInt64Attribute : public StunAttribute {
+public:
+    static const size_t SIZE = 8;
+
+    StunUInt64Attribute(uint16_t type);
+    StunUInt64Attribute(uint16_t type, uint64_t value);
+    ~StunUInt64Attribute() override {};
+
+    uint64_t value() const { return _bits; }
+    void set_value(uint64_t value) { _bits = value; }
+
+    bool read(rtc::ByteBufferReader *buf) override;
+    bool write(rtc::ByteBufferWriter *buf) override;
+
+private:
+    uint64_t _bits;
+};
+
 class StunByteStringAttribute : public StunAttribute {
 
 public:
@@ -201,5 +233,29 @@ private:
 private:
     char* _bytes = nullptr;
 };
+
+class StunErrorCodeAttribute : public StunAttribute {
+
+public:
+    static const uint16_t MIN_SIZE;
+    StunErrorCodeAttribute(uint16_t type, uint16_t length);
+    ~StunErrorCodeAttribute() override = default;
+
+    void set_code(int code);
+    int code() const;
+    void set_reason(const std::string& reason);
+
+    bool read(rtc::ByteBufferReader* buf) override;
+    bool write(rtc::ByteBufferWriter* buf) override;
+
+private:
+    uint8_t _class;
+    uint8_t _number;
+    std::string _reason;
+};
+
+int get_stun_success_response(int req_type);
+int get_stun_error_response(int req_type);
+bool is_stun_request_type(int req_type);
 
 }

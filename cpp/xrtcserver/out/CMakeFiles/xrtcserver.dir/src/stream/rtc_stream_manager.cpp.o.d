@@ -278,4 +278,8 @@ CMakeFiles/xrtcserver.dir/src/stream/rtc_stream_manager.cpp.o: \
  /usr/include/c++/11/bits/stl_multiset.h \
  /root/dev/cpp/xrtcserver/./src/ice/stun.h \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/byte_buffer.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_controller.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection.h \
+ /root/dev/cpp/xrtcserver/./src/ice/stun_request.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection_info.h \
  /root/dev/cpp/xrtcserver/./src/base/conf.h

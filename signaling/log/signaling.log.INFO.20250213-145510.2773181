@@ -1,6 +1,0 @@
-Log file created at: 2025/02/13 14:55:10
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I0213 14:55:10.176799 2773181 log.go:90] logId[2986887811] url[/xrtcclient/push] referer[http://114.114.114.114:9421/] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0] clientIP[122.9.168.185:55363] realClientIP[122.9.168.185:55363] uid[888] streamName[666] audio[1] video[1] totalCost[0.162ms]
-I0213 14:55:22.755232 2773181 log.go:90] logId[732881388] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0] clientIP[122.9.168.185:55363] realClientIP[122.9.168.185:55363] uid[888] streamName[666] audio[1] video[1] totalCost[0.198ms]

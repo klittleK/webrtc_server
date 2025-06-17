@@ -22,6 +22,10 @@ std::string stun_method_to_string(int type) {
     switch (type) {
         case STUN_BINDING_REQUEST:
             return "STUN_BINDING_REQUEST";
+        case STUN_BINDING_RESPONSE:
+            return "STUN_BINDING_RESPONSE";
+        case STUN_BINDING_ERROR_RESPONSE:
+            return "STUN_BINDING_ERROR_RESPONSE";
         default:
             return "UNKNOWN " + std::to_string(type);
     }
@@ -65,16 +69,17 @@ bool StunMessage::validate_fingerprint(const char *data, size_t len) {
  
 bool StunMessage::add_fingerprint() {
     auto fingerprint_attr_ptr = std::make_unique<StunUInt32Attribute>(STUN_ATTR_FINGERPRINT, 0);
+    auto fingerprint_attr = fingerprint_attr_ptr.get();
     add_attribute(std::move(fingerprint_attr_ptr));
     rtc::ByteBufferWriter buf;
     if (!write(&buf)) {
         return false;
     }
 
-    size_t msg_len_for_crc32 = buf.Length() - k_stun_attribute_header_size - fingerprint_attr_ptr->length();
+    size_t msg_len_for_crc32 = buf.Length() - k_stun_attribute_header_size - fingerprint_attr->length();
     uint32_t c = rtc::ComputeCrc32(buf.Data(), msg_len_for_crc32);
 
-    fingerprint_attr_ptr->set_value(c ^ STUN_FINGERPRINT_XOR_VALUE);
+    fingerprint_attr->set_value(c ^ STUN_FINGERPRINT_XOR_VALUE);
     return true;
 }
 
@@ -84,7 +89,7 @@ void StunMessage::add_attribute(std::unique_ptr<StunAttribute> attr) {
         attr_len += (4 - (attr_len % 4));
     }
 
-    _length += attr_len;
+    _length += (attr_len + k_stun_attribute_header_size);
     _attrs.push_back(std::move(attr));
 }
 
@@ -168,6 +173,7 @@ bool StunMessage::add_message_integrity(const std::string &password) {
 
 bool StunMessage::_add_message_integrity_of_type(uint16_t attr_type, uint16_t attr_size, const char* key, size_t key_len) {
     auto mi_attr_ptr = std::make_unique<StunByteStringAttribute>(attr_type, std::string(attr_size, '0'));
+    auto mi_attr = mi_attr_ptr.get();
     add_attribute(std::move(mi_attr_ptr));
 
     rtc::ByteBufferWriter buf;
@@ -175,7 +181,7 @@ bool StunMessage::_add_message_integrity_of_type(uint16_t attr_type, uint16_t at
         return false;
     }
 
-    size_t msg_len_for_hmac = buf.Length() - k_stun_attribute_header_size - mi_attr_ptr->length();
+    size_t msg_len_for_hmac = buf.Length() - k_stun_attribute_header_size - mi_attr->length();
     char hmac[k_stun_message_integrity_size];
     size_t ret = rtc::ComputeHmac(rtc::DIGEST_SHA_1, key, key_len, 
         buf.Data(), msg_len_for_hmac, hmac, sizeof(hmac));
@@ -184,7 +190,7 @@ bool StunMessage::_add_message_integrity_of_type(uint16_t attr_type, uint16_t at
         return false;
     }
 
-    mi_attr_ptr->copy_bytes(hmac, k_stun_message_integrity_size);
+    mi_attr->copy_bytes(hmac, k_stun_message_integrity_size);
     _password.assign(key, key_len);
     _integrity = IntegrityStatus::k_integrity_ok;
 
@@ -312,12 +318,21 @@ StunAttribute* StunMessage::_create_attribute(uint16_t type, uint16_t length) {
     return nullptr;
 }
 
-const StunUInt32Attribute *xrtc::StunMessage::get_uint32(uint16_t type) {
+const StunUInt32Attribute *StunMessage::get_uint32(uint16_t type) {
     return static_cast<const StunUInt32Attribute *>(_get_attribute(type));
 }
 
 const StunByteStringAttribute *StunMessage::get_byte_string(uint16_t type) {
     return static_cast<const StunByteStringAttribute *>(_get_attribute(type));
+}
+
+const StunErrorCodeAttribute *StunMessage::get_error_code() {
+    return static_cast<const StunErrorCodeAttribute *>(_get_attribute(STUN_ATTR_ERROR_CODE));
+}
+
+int StunMessage::get_error_code_value() {
+    auto error_attr = get_error_code();
+    return error_attr ? error_attr->code() : STUN_ERROR_GLOABAL_FAIL;
 }
 
 const StunAttribute *StunMessage::_get_attribute(uint16_t type) {
@@ -346,6 +361,10 @@ StunAttribute *StunAttribute::create(StunAttributeValueType value_type, uint16_t
         default:
             return nullptr;
     }
+}
+
+std::unique_ptr<StunErrorCodeAttribute> StunAttribute::create_error_code() {
+    return std::make_unique<StunErrorCodeAttribute>(STUN_ATTR_ERROR_CODE, StunErrorCodeAttribute::MIN_SIZE);
 }
 
 void StunAttribute::consume_padding(rtc::ByteBufferReader *buf) {
@@ -511,6 +530,31 @@ bool StunUInt32Attribute::write(rtc::ByteBufferWriter* buf) {
     return true;
 }
 
+// Uint32
+StunUInt64Attribute::StunUInt64Attribute(uint16_t type) :
+    StunAttribute(type, SIZE),
+    _bits(0) 
+{
+}
+
+StunUInt64Attribute::StunUInt64Attribute(uint16_t type, uint64_t value) :
+    StunAttribute(type, SIZE),
+    _bits(value) 
+{
+}
+
+bool StunUInt64Attribute::read(rtc::ByteBufferReader *buf) {
+    if (length() != SIZE || !buf->ReadUInt64(&_bits)) {
+        return false;
+    }
+    return true;
+}
+
+bool StunUInt64Attribute::write(rtc::ByteBufferWriter* buf) {
+    buf->WriteUInt64(_bits);
+    return true;
+}
+
 // ByteString
 StunByteStringAttribute::StunByteStringAttribute(uint16_t type, uint16_t length) :
     StunAttribute(type, length) {}
@@ -559,6 +603,51 @@ bool StunByteStringAttribute::write(rtc::ByteBufferWriter* buf) {
     return true;
 }
 
+const uint16_t StunErrorCodeAttribute::MIN_SIZE = 4;
 
+StunErrorCodeAttribute::StunErrorCodeAttribute(uint16_t type, uint16_t length):
+    StunAttribute(type, length),
+    _class(0),
+    _number(0)
+{
+}
+
+void StunErrorCodeAttribute::set_code(int code) {
+    _class = code / 100;
+    _number = code % 100;
+}
+
+int StunErrorCodeAttribute::code() const {
+    return _class * 100 + _number;
+}
+
+void StunErrorCodeAttribute::set_reason(const std::string& reason) {
+    _reason = reason;
+    set_length(MIN_SIZE + reason.size());
+}
+
+bool StunErrorCodeAttribute::read(rtc::ByteBufferReader* buf) {
+    // todo
+    return false;
+}
+
+bool StunErrorCodeAttribute::write(rtc::ByteBufferWriter* buf) {
+    buf->WriteUInt32(_class << 8 | _number);
+    buf->WriteString(_reason);
+    write_padding(buf);
+    return true;
+}
+
+int get_stun_success_response(int req_type) {
+    return is_stun_request_type(req_type) ? (req_type | 0x100) : -1;
+}
+
+int get_stun_error_response(int req_type) {
+    return is_stun_request_type(req_type) ? (req_type | 0x110) : -1;
+}
+
+bool is_stun_request_type(int req_type) {
+    return (req_type & k_stun_type_mask) == 0x0000;
+}
 
 }

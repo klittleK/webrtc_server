@@ -1,9 +1,0 @@
-Log file created at: 2025/02/13 19:44:16
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I0213 19:44:16.528654 2783186 http_server.go:97] start https server on port: 8081
-I0213 19:44:16.528721 2783186 http_server.go:92] start http server on port: 8080
-I0213 19:44:19.942455 2783186 log.go:90] logId[1299383504] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0] clientIP[122.9.168.185:57971] realClientIP[122.9.168.185:57971] uid[888] streamName[666] audio[1] video[1] totalCost[0.204ms]
-I0213 19:44:35.729106 2783186 log.go:90] logId[2739834609] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0] clientIP[122.9.168.185:57971] realClientIP[122.9.168.185:57971] audio[1] video[1] uid[888] streamName[666] totalCost[0.158ms]
-I0213 19:44:36.609308 2783186 log.go:90] logId[474805458] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0] clientIP[122.9.168.185:57971] realClientIP[122.9.168.185:57971] uid[888] streamName[666] audio[1] video[1] totalCost[0.180ms]

@@ -280,4 +280,8 @@ CMakeFiles/xrtcserver.dir/src/pc/peer_connection.cpp.o: \
  /root/dev/cpp/xrtcserver/./src/ice/port_allocator.h \
  /root/dev/cpp/xrtcserver/./src/base/network.h \
  /root/dev/cpp/xrtcserver/./src/ice/stun.h \
- /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/byte_buffer.h
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/byte_buffer.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_controller.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection.h \
+ /root/dev/cpp/xrtcserver/./src/ice/stun_request.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection_info.h

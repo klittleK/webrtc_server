@@ -249,4 +249,31 @@ CMakeFiles/xrtcserver.dir/src/stream/push_stream.cpp.o: \
  /root/dev/cpp/xrtcserver/./src/ice/port_allocator.h \
  /root/dev/cpp/xrtcserver/./src/base/network.h \
  /root/dev/cpp/xrtcserver/./src/ice/stun.h \
- /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/byte_buffer.h
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/byte_buffer.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_controller.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection.h \
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/logging.h \
+ /usr/include/c++/11/sstream /usr/include/c++/11/istream \
+ /usr/include/c++/11/ios /usr/include/c++/11/bits/basic_ios.h \
+ /usr/include/c++/11/bits/locale_facets.h /usr/include/c++/11/cwctype \
+ /usr/include/wctype.h /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h \
+ /usr/include/c++/11/bits/locale_facets.tcc \
+ /usr/include/c++/11/bits/basic_ios.tcc /usr/include/c++/11/ostream \
+ /usr/include/c++/11/bits/ostream.tcc \
+ /usr/include/c++/11/bits/istream.tcc \
+ /usr/include/c++/11/bits/sstream.tcc \
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/strings/string_builder.h \
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/string_encode.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/types/optional.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/utility/utility.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/base/internal/inline_variable.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/base/internal/identity.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/base/internal/invoke.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/types/bad_optional_access.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/types/internal/optional.h \
+ /root/dev/cpp/xrtcserver/./third_party/include/absl/memory/memory.h \
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/string_to_number.h \
+ /root/dev/cpp/xrtcserver/./src/ice/stun_request.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection_info.h

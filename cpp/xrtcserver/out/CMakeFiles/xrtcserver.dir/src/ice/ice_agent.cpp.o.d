@@ -258,4 +258,10 @@ CMakeFiles/xrtcserver.dir/src/ice/ice_agent.cpp.o: \
  /root/dev/cpp/xrtcserver/./src/ice/stun.h \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/byte_buffer.h \
  /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/buffer.h \
- /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/zero_memory.h
+ /root/dev/cpp/xrtcserver/../rtcbase/src/rtc_base/zero_memory.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_controller.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection.h \
+ /root/dev/cpp/xrtcserver/./src/ice/stun_request.h \
+ /usr/include/c++/11/map /usr/include/c++/11/bits/stl_map.h \
+ /usr/include/c++/11/bits/stl_multimap.h \
+ /root/dev/cpp/xrtcserver/./src/ice/ice_connection_info.h

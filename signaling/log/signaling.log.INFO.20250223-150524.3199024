@@ -1,8 +1,0 @@
-Log file created at: 2025/02/23 15:05:24
-Running on machine: hcss-ecs-6477
-Binary: Built with gc go1.23.2 for linux/amd64
-Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I0223 15:05:24.639744 3199024 http_server.go:97] start https server on port: 8081
-I0223 15:05:24.639787 3199024 http_server.go:92] start http server on port: 8080
-I0223 15:05:58.315065 3199024 log.go:90] logId[1545285951] url[/xrtcclient/push] referer[] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0] clientIP[119.8.242.52:61744] realClientIP[119.8.242.52:61744] uid[888] streamName[666] audio[1] video[1] totalCost[0.183ms]
-I0223 15:06:00.623547 3199024 log.go:90] logId[2453150014] url[/signaling/push] referer[https://lkbstream.cn:8081/xrtcclient/push?uid=888&streamName=666&audio=1&video=1] cookie[] ua[Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0] clientIP[119.8.242.52:61744] realClientIP[119.8.242.52:61744] uid[888] streamName[666] audio[1] video[1] totalCost[0.720ms]
