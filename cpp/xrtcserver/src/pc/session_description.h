@@ -98,7 +98,7 @@ public:
     std::string mid;
     std::string ice_ufrag;
     std::string ice_pwd;
-    std::unique_ptr<rtc::SSLFingerprint> identify_fingerprint;
+    std::unique_ptr<rtc::SSLFingerprint> identity_fingerprint;
     ConnectionRole connection_role = ConnectionRole::NONE;
 };
 

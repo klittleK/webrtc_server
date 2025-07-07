@@ -30,6 +30,7 @@ public:
     void set_selected_connection(IceConnection* conn) { _selected_connection = conn; }
     void mark_connection_pinged(IceConnection* conn);
     void on_connection_destroyed(IceConnection* conn);
+    bool ready_to_send(IceConnection* conn);
 
 private:
     bool _weak() {
@@ -43,7 +44,6 @@ private:
     bool _more_pingable(IceConnection* conn1, IceConnection* conn2);
 
     int _compare_connections(IceConnection* a, IceConnection* b);
-    bool _ready_to_send(IceConnection* conn);
 
 private:
     IceTransportChannel* _ice_channel;

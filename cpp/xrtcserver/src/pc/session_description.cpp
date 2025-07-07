@@ -30,7 +30,7 @@ AudioContentDescription::AudioContentDescription() {
 VideoContentDescription::VideoContentDescription() {
     auto codec = std::make_shared<VideoCodecInfo>();
     codec->id = 107;
-    codec->name = "h264";
+    codec->name = "H264";
     codec->clockrate = 90000;
     _codecs.push_back(codec);
 
@@ -169,8 +169,8 @@ bool SessionDescription::add_transport_info(const std::string &mid, const IcePar
     tdesc->ice_pwd = ice_param.ice_pwd;
 
     if(certificate) {
-        tdesc->identify_fingerprint = rtc::SSLFingerprint::CreateFromCertificate(*certificate);
-        if(!tdesc->identify_fingerprint) {
+        tdesc->identity_fingerprint = rtc::SSLFingerprint::CreateFromCertificate(*certificate);
+        if(!tdesc->identity_fingerprint) {
             RTC_LOG(LS_WARNING) << "get fingerprint failed";
             return false;
         }
@@ -302,7 +302,7 @@ std::string SessionDescription::to_string() {
             ss << "a=ice-ufrag:" << transport_info->ice_ufrag << "\r\n";
             ss << "a=ice-pwd:" << transport_info->ice_pwd << "\r\n";
 
-            auto fp = transport_info->identify_fingerprint.get();
+            auto fp = transport_info->identity_fingerprint.get();
             if(fp) {
                 ss << "a=fingerprint:" << fp->algorithm << " " << fp->GetRfc4572Fingerprint() << "\r\n";
                 ss << "a=setup:" << connection_role_to_string(transport_info->connection_role) << "\r\n";

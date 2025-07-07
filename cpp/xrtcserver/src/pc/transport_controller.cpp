@@ -2,7 +2,6 @@
 
 #include "pc/transport_controller.h"
 #include "pc/dtls_transport.h"
-#include "transport_controller.h"
 
 namespace xrtc {
 
@@ -14,6 +13,15 @@ TransportController::TransportController(EventLoop *el, PortAllocator* allocator
 }
 
 TransportController::~TransportController() {
+    for (auto dtls : _dtls_transport_by_name) {
+        delete dtls.second;
+    }
+    _dtls_transport_by_name.clear();
+
+    if (_ice_agent) {
+        delete _ice_agent;
+        _ice_agent = nullptr;
+    }
 }
 
 int TransportController::set_local_description(SessionDescription *desc) {
@@ -34,12 +42,81 @@ int TransportController::set_local_description(SessionDescription *desc) {
         }
 
         DtlsTransport* dtls = new DtlsTransport(_ice_agent->get_channel(mid, IceCandidateComponent::RTP));
+        dtls->set_local_certificate(_local_certificate);
+        dtls->signal_receiving_state.connect(this, &TransportController::_on_dtls_receiving_state);
+        dtls->signal_receiving_state.connect(this, &TransportController::_on_dtls_writable_state);
+        dtls->signal_dtls_state.connect(this, &TransportController::_on_dtls_state);
+        _ice_agent->signal_ice_state.connect(this, &TransportController::_on_ice_state);
         _add_dtls_transport(dtls);
     }
 
     _ice_agent->gathering_candidate();
 
     return 0;
+}
+
+void TransportController::_on_dtls_receiving_state(DtlsTransport*) {
+    _update_state();
+}
+
+void TransportController::_on_dtls_writable_state(DtlsTransport*) {
+    _update_state();
+}
+
+void TransportController::_on_dtls_state(DtlsTransport*, DtlsTransportState) {
+    _update_state();
+}
+
+void TransportController::_on_ice_state(IceAgent*, IceTransportState) {
+    _update_state();
+}
+
+void TransportController::_update_state() {
+    PeerConnectionState pc_state = PeerConnectionState::k_new;
+    std::map<DtlsTransportState, int> dtls_state_counts;
+    std::map<IceTransportState, int> ice_state_counts;
+    auto iter = _dtls_transport_by_name.begin();
+    for (; iter != _dtls_transport_by_name.end(); ++iter) {
+        dtls_state_counts[iter->second->dtls_state()]++;
+        ice_state_counts[iter->second->ice_channel()->state()]++;
+    }
+    
+    int total_connected = dtls_state_counts[DtlsTransportState::k_connected] + ice_state_counts[IceTransportState::k_connected];
+    int total_dtls_connecting = dtls_state_counts[DtlsTransportState::k_connecting];
+    int total_failed = dtls_state_counts[DtlsTransportState::k_failed] + ice_state_counts[IceTransportState::k_failed];
+    int total_closed = dtls_state_counts[DtlsTransportState::k_closed] + ice_state_counts[IceTransportState::k_closed];
+    int total_new = dtls_state_counts[DtlsTransportState::k_new] + ice_state_counts[IceTransportState::k_new];
+    int total_ice_checking = ice_state_counts[IceTransportState::k_checking];
+    int total_ice_disconnected = ice_state_counts[IceTransportState::k_disconnected];
+    int total_ice_completed = ice_state_counts[IceTransportState::k_completed];
+
+    int total_transports = _dtls_transport_by_name.size() * 2;
+
+    if (total_failed > 0) {
+        pc_state = PeerConnectionState::k_failed;
+    } else if (total_ice_disconnected > 0) {
+        pc_state = PeerConnectionState::k_disconnected;
+    } else if (total_new + total_closed == total_transports) {
+        pc_state = PeerConnectionState::k_new;
+    } else if (total_ice_checking + total_dtls_connecting + total_new > 0) {
+        pc_state = PeerConnectionState::k_connecting;
+    } else if (total_connected + total_ice_completed + total_closed == total_transports) {
+        pc_state = PeerConnectionState::k_connected;
+    }
+
+    if (_pc_state != pc_state) {
+        _pc_state = pc_state;
+        signal_connection_state(this, pc_state);
+    }
+}
+
+DtlsTransport* TransportController::_get_dtls_transport(const std::string& transport_name) {
+    auto iter = _dtls_transport_by_name.find(transport_name);
+    if (iter != _dtls_transport_by_name.end()) {
+        return iter->second;
+    }
+
+    return nullptr;
 }
 
 int TransportController::set_remote_description(SessionDescription *desc) {
@@ -59,10 +136,18 @@ int TransportController::set_remote_description(SessionDescription *desc) {
                 content->mid(),
                 IceCandidateComponent::RTP,
                 IceParameters(td->ice_ufrag, td->ice_pwd));
+            auto dtls = _get_dtls_transport(mid);
+            if (dtls) {
+                dtls->set_remote_fingerprint(td->identity_fingerprint->algorithm, (const uint8_t *)td->identity_fingerprint->digest.data(), td->identity_fingerprint->digest.size());
+            }
         }
     }
 
     return 0;
+}
+
+void TransportController::set_local_certificate(rtc::RTCCertificate *cert) {
+    _local_certificate = cert;
 }
 
 void TransportController::_add_dtls_transport(DtlsTransport *dtls) {

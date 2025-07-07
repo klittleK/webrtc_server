@@ -9,7 +9,6 @@
 #include "server/rtc_worker.h"
 
 namespace xrtc {
-
 const uint64_t k_year_in_ms = 365 * 24 * 3600 * 1000L;
 
 void rtc_server_recv_notify(EventLoop *el, IOWatcher *w, int fd, int events, void *data) {

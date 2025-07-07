@@ -32,6 +32,7 @@ add_executable(xrtcserver ${all_src})
 target_link_libraries(xrtcserver libyaml-cpp.a librtcbase.a 
     libabsl_strings.a
     libabsl_throw_delegate.a
+    libabsl_bad_optional_access.a
     libev.a
     libjsoncpp.a
     libssl.a

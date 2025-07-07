@@ -31,6 +31,21 @@ IceTransportChannel::~IceTransportChannel() {
         _el->delete_timer(_ping_watcher);
         _ping_watcher = nullptr;
     }
+
+    std::vector<IceConnection*> connections = _ice_controller->connections();
+    for (auto conn : connections) {
+        conn->destroy();
+    }
+
+    for (auto port : _ports) {
+        delete port;
+    }
+
+    _ports.clear();
+
+    _ice_controller.reset(nullptr);
+
+    RTC_LOG(LS_INFO) << to_string() << ": IceTransportChannel destroy";
 }
 
 void IceTransportChannel::set_ice_params(const IceParameters& ice_params) {
@@ -81,6 +96,7 @@ void IceTransportChannel::gathering_candidate()
         }
         UDPPort* port = new UDPPort(_el, _transport_name, _component, _ice_params);
         port->signal_unknown_address.connect(this, &IceTransportChannel::_on_unknown_address);
+        _ports.push_back(port);
         Candidate c;
         int ret = port->create_ice_candidate(network, _allocator->min_port(), _allocator->max_port(), c);
         if (ret != 0) {
@@ -131,11 +147,12 @@ void IceTransportChannel::_on_unknown_address(UDPPort* port, const rtc::SocketAd
 
     _sort_connections_and_update_state();
 }
-
+ 
 void IceTransportChannel::_add_connection(IceConnection *conn) {
     conn->signal_state_change.connect(this, &IceTransportChannel::_on_connection_state_change);
     conn->signal_connection_destroy.connect(this, &IceTransportChannel::_on_connection_destroyed);
     conn->signal_read_packet.connect(this, &IceTransportChannel::_on_read_packet);
+    _had_connection = true; // 有过连接
     _ice_controller->add_connection(conn);
 }
 
@@ -172,6 +189,10 @@ void IceTransportChannel::_set_writable(bool writable) {
         return;
     } 
     
+    if (writable) {
+        _has_been_connection = true; // 有过连接并且发送过数据
+    }
+
     _writable = writable;
     RTC_LOG(LS_INFO) << to_string() << ": writable state changed to " << _writable;
     signal_writable_state(this);
@@ -199,6 +220,41 @@ void IceTransportChannel::_update_state() {
         }
     }
     _set_receiving(receiving);
+
+    IceTransportState state = _compute_ice_transport_state();
+    if (state != _state) {
+        _state = state;
+        signal_ice_state_changed(this);
+    }
+}
+
+IceTransportState IceTransportChannel::_compute_ice_transport_state() {
+    bool has_connection = false;
+    for (auto conn : _ice_controller->connections()) {
+        if (conn->active()) {
+            has_connection = true;
+            break;
+        }
+    }
+
+    if (_had_connection && !has_connection) {
+        return IceTransportState::k_failed;
+    }
+
+    if (_has_been_connection && !writable()) {
+        return IceTransportState::k_disconnected;
+    }
+
+    if (!_had_connection && !has_connection) {
+        return IceTransportState::k_new;
+    }
+
+    if (has_connection && !writable()) {
+        return IceTransportState::k_checking;
+    }
+
+    return IceTransportState::k_connected;
+
 }
 
 void IceTransportChannel::_maybe_switch_selected_connection(IceConnection* conn) {
@@ -237,6 +293,7 @@ void IceTransportChannel::_maybe_start_pinging() {
             << "for the first time, starting to ping";
         // 启动定时器
         _el->start_timer(_ping_watcher, _cur_ping_interval * 1000);
+        _start_pinging = true;
     }
 }
 
@@ -245,11 +302,9 @@ void IceTransportChannel::_on_check_and_ping() {
 
     auto result = _ice_controller->select_connection_to_ping(_last_ping_sent_ms - PING_INTERVAL_DIFF);
 
-    RTC_LOG(LS_WARNING) << "======conn: " << result.conn << ", ping interval: " << result.ping_interval;
-
     if (result.conn) {
         IceConnection* conn = (IceConnection*)result.conn;
-        _ping_connection((IceConnection*)result.conn);
+        _ping_connection(conn);
         _ice_controller->mark_connection_pinged(conn);
     }
 
@@ -271,6 +326,20 @@ void IceTransportChannel::_update_connection_states() {
 void IceTransportChannel::_ping_connection(IceConnection* conn) {
     _last_ping_sent_ms = rtc::TimeMillis();
     conn->ping(_last_ping_sent_ms);
+}
+
+int IceTransportChannel::send_packet(const char *data, size_t len) {
+    if (!_ice_controller->ready_to_send(_selected_connection)) {
+        RTC_LOG(LS_WARNING) << to_string() << ": Selected connection not ready to send";
+        return -1;
+    }
+    
+    int sent = _selected_connection->send_packet(data, len);
+    if (sent <= 0) {
+        RTC_LOG(LS_WARNING) << to_string() << ": Selected connection send failed";
+    }
+
+    return sent;
 }
 
 std::string IceTransportChannel::to_string() {

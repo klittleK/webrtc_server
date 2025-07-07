@@ -1,3 +1,5 @@
+#include <rtc_base/logging.h>
+
 #include "push_stream.h"
 
 namespace xrtc {
@@ -7,6 +9,7 @@ PushStream::PushStream(EventLoop *el, PortAllocator* allocator, uint64_t uid, co
 }
 
 PushStream::~PushStream() {
+    RTC_LOG(LS_INFO) << to_string() << ": Push stream destroy";
 }
 
 std::string PushStream::create_offer() {
@@ -16,6 +19,6 @@ std::string PushStream::create_offer() {
     options.recv_audio = audio;
     options.recv_video = video;
     options.use_rtcp_mux = true;
-    return pc->creater_offer(options);
+    return pc->create_offer(options);
 }
 }
