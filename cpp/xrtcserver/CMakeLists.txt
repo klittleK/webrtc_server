@@ -25,6 +25,7 @@ file(GLOB all_src
     "./src/stream/*.cpp"
     "./src/pc/*.cpp"
     "./src/ice/*.cpp"
+    "./src/module/rtp_rtcp/*.cpp"
 )
 
 add_executable(xrtcserver ${all_src})
@@ -36,6 +37,8 @@ target_link_libraries(xrtcserver libyaml-cpp.a librtcbase.a
     libev.a
     libjsoncpp.a
     libssl.a
-    libcrypto.a -lpthread -ldl
+    libcrypto.a
+    libsrtp3.a
+    -lpthread -ldl
     
 )

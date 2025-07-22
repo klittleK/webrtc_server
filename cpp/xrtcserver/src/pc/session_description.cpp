@@ -189,6 +189,7 @@ bool SessionDescription::add_transport_info(const std::string &mid, const IcePar
 
 bool SessionDescription::add_transport_info(std::shared_ptr<TransportDescription> td) {
     _transport_infos.push_back(td);
+    return true;
 }
 
 std::shared_ptr<TransportDescription> SessionDescription::get_transport_info(const std::string& mid) {
@@ -255,6 +256,36 @@ static void build_candidates(std::shared_ptr<MediaContentDescription> content, s
     }
 }
 
+static void add_ssrc_line(uint32_t ssrc, const std::string& attribute, const std::string& value, std::stringstream& ss) {
+    ss << "a=ssrc:" << ssrc << " " << attribute << ":" << value << "\r\n";
+}
+
+static void build_ssrc(std::shared_ptr<MediaContentDescription> content, std::stringstream& ss) {
+    for (auto track : content->streams()) {
+        for (auto ssrc_group : track.ssrc_groups) {
+            if (ssrc_group.ssrcs.empty()) {
+                continue;
+            }
+
+            ss << "a=ssrc-group:" << ssrc_group.semantics;
+            for (auto ssrc : ssrc_group.ssrcs) {
+                ss << " " << ssrc;
+            }
+
+            ss << "\r\n";
+        }
+
+        std::string msid = track.stream_id + " " + track.id;
+
+        for (auto ssrc : track.ssrcs) {
+            add_ssrc_line(ssrc, "cname", track.cname, ss);
+            add_ssrc_line(ssrc, "msid", msid, ss);
+            add_ssrc_line(ssrc, "mslabel", track.stream_id, ss);
+            add_ssrc_line(ssrc, "lable", track.id, ss);
+        }
+    }
+}
+
 /*
 v=（协议版本）: 必选字段，指定SDP的版本，目前通常为0。这是SDP消息的第一行
 o=（发起者/所有者）: 必选字段，包括用户名、会话ID、会话版本、网络类型、地址类型和发起者地址。可以用-代表省略参数
@@ -318,6 +349,7 @@ std::string SessionDescription::to_string() {
         }
 
         build_rtp_map(content, ss);
+        build_ssrc(content, ss);
     }
 
 

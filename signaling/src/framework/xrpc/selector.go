@@ -42,7 +42,7 @@ func (rrs *RoundRobinSelector) PickServer() (net.Addr, error) {
 	rrs.Lock()
 	index := rrs.curIndex
 	rrs.curIndex++
-	if rrs.curIndex > len(rrs.addrs) {
+	if rrs.curIndex >= len(rrs.addrs) {
 		rrs.curIndex = 0
 	}
 	rrs.Unlock()

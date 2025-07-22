@@ -2,6 +2,7 @@
 #include <api/crypto/crypto_options.h>
 
 #include "pc/dtls_transport.h"
+#include "dtls_transport.h"
 
 namespace xrtc {
 
@@ -142,7 +143,6 @@ void DtlsTransport::_on_read_packet(IceTransportChannel *channel, const char *bu
                     return;
                 }
 
-                //RTC_LOG(LS_INFO) << "=========================rtp received: " << len;
                 signal_read_packet(this, buf, len, ts);
             }
 
@@ -418,5 +418,16 @@ std::string DtlsTransport::to_string() {
     return ss.str();
 }
 
+bool DtlsTransport::get_srtp_crypto_suite(int *selected_crypto_suite) {
+    if (_dtls_state != DtlsTransportState::k_connected) {
+        return false;
+    }
+    
+    return _dtls->GetDtlsSrtpCryptoSuite(selected_crypto_suite);
+}
 
+bool DtlsTransport::export_keying_material(const std::string &label, const uint8_t *context, size_t context_len, bool use_context, uint8_t *result, size_t result_len) {
+
+    return _dtls.get() ? _dtls->ExportKeyingMaterial(label, context, context_len, use_context, result, result_len) : false;
+}
 }

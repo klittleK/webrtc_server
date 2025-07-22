@@ -204,6 +204,11 @@ int SignalingWorker::_process_request(TcpConnection* c, const rtc::Slice& header
     switch (cmdno) {
     case CMDNO_PUSH: 
         return _process_push(cmdno, c, root, xh->log_id);  // 异步
+    case CMDNO_PULL:
+        return _process_pull(cmdno, c, root, xh->log_id);
+    case CMDNO_STOP_PUSH:
+        ret = _process_stop_push(cmdno, c, root, xh->log_id);  // 同步返回，由于不需要返回什么结果，默认只要收到停止请求就算成功
+        break;
     case CMDNO_ANSWER:
         ret = _process_answer(cmdno, c, root, xh->log_id); // 同步
         break;
@@ -253,7 +258,7 @@ int SignalingWorker::_process_push(int cmdno, TcpConnection *c, const Json::Valu
         audio = root["audio"].asInt();
         video = root["video"].asInt();
     } catch (Json::Exception e) {
-        RTC_LOG(LS_WARNING) << "parse json body error: " << e.what() << "log_id: " , log_id;
+        RTC_LOG(LS_WARNING) << "parse json body error: " << e.what() << "log_id: " << log_id;
         return -1;
     }
 
@@ -277,6 +282,68 @@ int SignalingWorker::_process_push(int cmdno, TcpConnection *c, const Json::Valu
     return g_rtc_server->send_rtc_msg(msg);
 }
 
+int SignalingWorker::_process_pull(int cmdno, TcpConnection *c, const Json::Value &root, uint32_t log_id) {
+    uint64_t uid;
+    std::string stream_name;
+    int audio;
+    int video;
+
+    try {
+        uid = root["uid"].asUInt64();
+        stream_name = root["stream_name"].asString();
+        audio = root["audio"].asInt();
+        video = root["video"].asInt();
+    } catch (Json::Exception e) {
+        RTC_LOG(LS_WARNING) << "parse json body error: " << e.what() << "log_id: " << log_id;
+        return -1;
+    }
+
+    RTC_LOG(LS_INFO) << "cmdno: " << cmdno << 
+    " stream_name: " << stream_name <<
+    " uid: " << uid <<
+    " audio: " << audio <<
+    " video: " << video << " signaling server pull request";
+
+    std::shared_ptr<RtcMsg> msg = std::make_shared<RtcMsg>();
+    msg->cmdno = cmdno;
+    msg->uid = uid;
+    msg->stream_name = stream_name;
+    msg->audio = audio;
+    msg->video = video;
+    msg->log_id = log_id;
+    msg->worker = this;
+    msg->conn = c;
+    msg->fd = c->fd;
+
+    return g_rtc_server->send_rtc_msg(msg);
+}
+
+int SignalingWorker::_process_stop_push(int cmdno, TcpConnection *c, const Json::Value &root, uint32_t log_id) {
+    uint64_t uid;
+    std::string stream_name;
+
+    try {
+        uid = root["uid"].asUInt64();
+        stream_name = root["stream_name"].asString();
+    } catch (Json::Exception e) {
+        RTC_LOG(LS_WARNING) << "parse json body error: " << e.what() << "log_id: " << log_id;
+        return -1;
+    }
+
+    RTC_LOG(LS_INFO) << "cmdno: " << cmdno << 
+    " stream_name: " << stream_name <<
+    " uid: " << uid <<
+    "  signaling server send stop push request";
+
+    std::shared_ptr<RtcMsg> msg = std::make_shared<RtcMsg>();
+    msg->cmdno = cmdno;
+    msg->uid = uid;
+    msg->stream_name = stream_name;
+    msg->log_id = log_id;
+
+    return g_rtc_server->send_rtc_msg(msg);
+}
+
 int SignalingWorker::_process_answer(int cmdno, TcpConnection *c, const Json::Value &root, uint32_t log_id) {
     uint64_t uid;
     std::string stream_name;
@@ -289,7 +356,7 @@ int SignalingWorker::_process_answer(int cmdno, TcpConnection *c, const Json::Va
         answer = root["answer"].asString();
         stream_type = root["type"].asString();
     } catch (Json::Exception e) {
-        RTC_LOG(LS_WARNING) << "parse json body error: " << e.what() << "log_id: " , log_id;
+        RTC_LOG(LS_WARNING) << "parse json body error: " << e.what() << "log_id: " << log_id;
         return -1;
     }
 
@@ -448,6 +515,7 @@ void SignalingWorker::_process_rtc_msg() {
 
     switch (msg->cmdno) {
         case CMDNO_PUSH:
+        case CMDNO_PULL:
             _response_server_offer(msg);
             break;
         default:

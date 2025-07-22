@@ -9,26 +9,32 @@ import (
 	"strconv"
 )
 
-type sendAnswerAction struct{}
+type pullAction struct{}
 
-func NewSendAnswerAction() *sendAnswerAction {
-	return &sendAnswerAction{}
+func NewPullAction() *pullAction {
+	return &pullAction{}
 }
 
-type xrtcSendAnswerReq struct {
+type xrtcPullReq struct {
 	Cmdno      int    `json:"cmdno"`
 	Uid        uint64 `json:"uid"`
 	StreamName string `json:"stream_name"`
-	Answer     string `json:"answer"`
-	Type       string `json:"type"`
+	Audio      int    `json:"audio"`
+	Video      int    `json:"video"`
 }
 
-type xrtcSendAnswerResp struct {
+type xrtcPullResp struct {
 	ErrNo  int    `json:"err_no"`
 	ErrMsg string `json:"err_msg"`
+	Offer  string `json:"offer"`
 }
 
-func (*sendAnswerAction) Execute(w http.ResponseWriter, cr *framework.ComRequest) {
+type pullData struct {
+	Type string `json:"type"`
+	Sdp  string `json:"sdp"`
+}
+
+func (*pullAction) Execute(w http.ResponseWriter, cr *framework.ComRequest) {
 	r := cr.R
 
 	// uid
@@ -56,39 +62,39 @@ func (*sendAnswerAction) Execute(w http.ResponseWriter, cr *framework.ComRequest
 		return
 	}
 
-	// answer
-	var answer string
-	if values, ok := r.Form["answer"]; ok {
-		answer = values[0]
+	// audio video
+	var strAudio, strVideo string
+	var audio, video int
+
+	if values, ok := r.Form["audio"]; ok {
+		strAudio = values[0]
 	}
 
-	if "" == answer {
-		cerr := comerrors.New(comerrors.ParamErr, "answer is null")
-		writeJsonErrorResponse(cerr, w, cr)
-		return
+	if "" == strAudio || "0" == strAudio {
+		audio = 0
+	} else {
+		audio = 1
 	}
 
-	// type
-	var strType string
-	if values, ok := r.Form["type"]; ok {
-		strType = values[0]
+	if values, ok := r.Form["video"]; ok {
+		strVideo = values[0]
 	}
 
-	if "" == strType {
-		cerr := comerrors.New(comerrors.ParamErr, "strType is null")
-		writeJsonErrorResponse(cerr, w, cr)
-		return
+	if "" == strVideo || "0" == strVideo {
+		video = 0
+	} else {
+		video = 1
 	}
 
-	req := xrtcSendAnswerReq{
-		Cmdno:      CMDNO_ANSWER,
+	req := xrtcPullReq{
+		Cmdno:      CMDNO_PULL,
 		Uid:        uid,
 		StreamName: streamName,
-		Answer:     answer,
-		Type:       strType,
+		Audio:      audio,
+		Video:      video,
 	}
 
-	var resp xrtcSendAnswerResp
+	var resp xrtcPullResp
 
 	err = framework.Call("xrtc", req, &resp, cr.LogId)
 	if err != nil {
@@ -108,6 +114,10 @@ func (*sendAnswerAction) Execute(w http.ResponseWriter, cr *framework.ComRequest
 	httpResp := comHttpResp{
 		ErrNo:  0,
 		ErrMsg: "success",
+		Data: pullData{
+			Type: "offer",
+			Sdp:  resp.Offer,
+		},
 	}
 
 	b, _ := json.Marshal(httpResp)

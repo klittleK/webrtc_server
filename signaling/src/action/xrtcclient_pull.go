@@ -7,15 +7,15 @@ import (
 	"signaling/src/framework"
 )
 
-type xrtcClientPushAction struct{}
+type xrtcClientPullAction struct{}
 
-func NewXrtcClientPushAction() *xrtcClientPushAction {
-	return &xrtcClientPushAction{}
+func NewXrtcClientPullAction() *xrtcClientPullAction {
+	return &xrtcClientPullAction{}
 }
 
-func (*xrtcClientPushAction) Execute(w http.ResponseWriter, cr *framework.ComRequest) {
+func (*xrtcClientPullAction) Execute(w http.ResponseWriter, cr *framework.ComRequest) {
 	r := cr.R
-	t, err := template.ParseFiles(framework.GetStaticDir() + "/template/push.tpl")
+	t, err := template.ParseFiles(framework.GetStaticDir() + "/template/pull.tpl")
 	if err != nil {
 		fmt.Println(err)
 		writeHtmlErrorResponse(w, http.StatusNotFound, "404 - Not found")

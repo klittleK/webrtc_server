@@ -8,6 +8,7 @@
 
 #include "pc/session_description.h"
 #include "pc/transport_controller.h"
+#include "pc/stream_params.h"
 
 namespace xrtc {
 
@@ -31,6 +32,17 @@ public:
     std::string create_offer(const RTCOfferAnswerOptions& options);
     int set_remote_sdp(const std::string& sdp);
 
+    SessionDescription* remote_desc() { return _remote_desc.get(); }
+    SessionDescription* local_desc() { return _local_desc.get();}
+
+    void add_audio_source(const std::vector<StreamParams>& source) {
+        _audio_source = source;
+    }
+
+    void add_video_source(const std::vector<StreamParams>& source) {
+        _video_source = source;
+    }
+
     sigslot::signal2<PeerConnection*, PeerConnectionState> signal_connection_state;
 
 private:
@@ -48,6 +60,8 @@ private:
     rtc::RTCCertificate* _certificate = nullptr;
     std::unique_ptr<TransportController> _transport_controller;
     TimerWatcher* _destroy_timer = nullptr;
+    std::vector<StreamParams> _audio_source;
+    std::vector<StreamParams> _video_source;
 };
 
 }

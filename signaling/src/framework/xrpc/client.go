@@ -44,7 +44,7 @@ func (c *Client) readTimeout() time.Duration {
 	return c.ReadTimeout
 }
 
-func (c *Client) writeTimeoutTimeout() time.Duration {
+func (c *Client) writeTimeout() time.Duration {
 	if c.WriteTimeout <= 0 {
 		return defaultWriteTimeout
 	}
@@ -58,13 +58,13 @@ func (c *Client) Do(req *Request) (*Response, error) {
 		return nil, err
 	}
 
-	nc, err := net.DialTimeout(addr.Network(), addr.String(), c.ConnectTimeout)
+	nc, err := net.DialTimeout(addr.Network(), addr.String(), c.connectTimeout())
 	if err != nil {
 		return nil, err
 	}
 
 	nc.SetReadDeadline(time.Now().Add(c.readTimeout()))
-	nc.SetWriteDeadline(time.Now().Add(c.writeTimeoutTimeout()))
+	nc.SetWriteDeadline(time.Now().Add(c.writeTimeout()))
 
 	rw := bufio.NewReadWriter(bufio.NewReader(nc), bufio.NewWriter(nc))
 	if _, err := req.Write(rw); err != nil {

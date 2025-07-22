@@ -1,12 +1,12 @@
 'use strict'
 
 const debugInfo = document.getElementById("debugInfo");
-var localVideo = document.getElementById("localVideo")
-var pushBtn = document.getElementById("pushBtn");
-var stopPushBtn = document.getElementById("stopPushBtn");
+var remoteVideo = document.getElementById("remoteVideo")
+var pullBtn = document.getElementById("pullBtn");
+var stopPullBtn = document.getElementById("stopPullBtn");
 
-pushBtn.addEventListener("click", startPush);
-stopPushBtn.addEventListener("click", stopPush);
+pullBtn.addEventListener("click", startPull);
+stopPullBtn.addEventListener("click", stopPull);
 
 var uid = $("#uid").val();
 var streamName = $("#streamName").val();
@@ -15,7 +15,7 @@ var video = $("#video").val();
 var offer = "";
 var pc;
 const config = {};
-var localStream;
+var remoteStream;
 var lastConnectionState = "";
 
 function addDebugInfo(message) {
@@ -92,43 +92,43 @@ async function logStats() {
     }
 }
 
-function startPush() {
-    console.log("send push: /signaling/push");
-    addDebugInfo("发起推流请求");
+function startPull() {
+    console.log("send pull: /signaling/pull");
+    addDebugInfo("发起拉流请求");
 
-    $.post("/signaling/push",
+    $.post("/signaling/pull",
         {"uid": uid, "streamName": streamName, "audio": audio, "video": video},
         function(data, textStatus) {
-            console.log("push response: " + JSON.stringify(data));
+            console.log("pull response: " + JSON.stringify(data));
             if("success" == textStatus && 0 == data.errNo) {
-                $("#tips1").html("<font color='blue'>推流请求成功！</font>");
+                $("#tips1").html("<font color='blue'>拉流请求成功！</font>");
                 console.log("remote offer: \r\n" + data.data.sdp);
                 offer = data.data;
                 
                 // 调试信息 - 检查offer SDP
                 const hasVideo = data.data.sdp.includes("m=video");
-                addDebugInfo(`推流请求成功，SDP包含视频: ${hasVideo}`);
+                addDebugInfo(`拉流请求成功，SDP包含视频: ${hasVideo}`);
                 
-                pushStream();
+                pullStream();
             } else {
-                $("#tips1").html("<font color='blue'>推流请求失败！</font>");
-                addDebugInfo("推流请求失败");
+                $("#tips1").html("<font color='blue'>拉流请求失败！</font>");
+                addDebugInfo("拉流请求失败");
             }
         },
         "json"
     );
 }
 
-function stopPush() {
-    console.log("send stop push: /signaling/stoppush");
+function stopPull() {
+    console.log("send stop pull: /signaling/stoppull");
 
-    localVideo.srcObject = null;
-    if (localStream && localStream.getAudioTracks()) {
-        localStream.getAudioTracks()[0].stop();
+    remoteVideo.srcObject = null;
+    if (remoteStream && localStream.getAudioTracks()) {
+        remoteStream.getAudioTracks()[0].stop();
     }
 
-    if (localStream && localStream.getVideoTracks()) {
-        localStream.getVideoTracks()[0].stop();
+    if (remoteStream && localStream.getVideoTracks()) {
+        remoteStream.getVideoTracks()[0].stop();
     }
 
     if (pc) {
@@ -140,14 +140,14 @@ function stopPush() {
     $("#tips2").html("");
     $("#tips3").html("");
 
-    $.post("/signaling/stoppush",
+    $.post("/signaling/stoppull",
         {"uid": uid, "streamName": streamName},
         function(data, textStatus) {
-            console.log("stop push response: " + JSON.stringify(data));
+            console.log("stop pull response: " + JSON.stringify(data));
             if("success" == textStatus && 0 == data.errNo) {
-                $("#tips1").html("<font color='blue'>停止推流请求成功！</font>");
+                $("#tips1").html("<font color='blue'>停止拉流请求成功！</font>");
             } else {
-                $("#tips1").html("<font color='blue'>停止推流请求失败！</font>");
+                $("#tips1").html("<font color='blue'>停止拉流请求失败！</font>");
             }
         },
         "json"
@@ -162,7 +162,7 @@ function sendAnswer(answerSdp) {
     addDebugInfo(`发送answer，SDP包含视频: ${hasVideo}`);
 
     $.post("/signaling/sendanswer",
-        {"uid": uid, "streamName": streamName, "answer": answerSdp, "type": "push"},
+        {"uid": uid, "streamName": streamName, "answer": answerSdp, "type": "pull"},
         function(data, textStatus) {
             console.log("send answer response: " + JSON.stringify(data));
             if("success" == textStatus && 0 == data.errNo) {
@@ -171,7 +171,7 @@ function sendAnswer(answerSdp) {
                 
                 // 定期检查状态
                 setInterval(() => {
-                    logTrackStatus();
+                    //logTrackStatus();
                     logStats();
                 }, 3000);
             } else {
@@ -183,7 +183,7 @@ function sendAnswer(answerSdp) {
     );
 }
 
-function pushStream() {
+function pullStream() {
     console.log("创建PeerConnection");
     pc = new RTCPeerConnection(config);
 
@@ -214,6 +214,13 @@ function pushStream() {
             logTrackStatus();
         }
     }
+
+    pc.onaddstream = function(e) {
+        remoteStream = e.stream;
+        remoteVideo.srcObject = e.stream;
+    }
+
+    console.log("set remote sdp start");
     
     pc.setRemoteDescription(offer).then(
         setRemoteDescriptionSuccess,
@@ -221,89 +228,16 @@ function pushStream() {
     );
 }
 
-window.addEventListener("message", function(event) {
-    if (event.origin != window.location.origin) {
-        return;
-    }
-
-    if (event.data.type) {
-        if (event.data.type == "SS_DIALOG_SUCCESS") {
-            console.log("用户同意屏幕共享， streamId: " + event.data.streamId);
-            addDebugInfo(`用户同意屏幕共享，streamId: ${event.data.streamId}`);
-            startScreenStreamFrom(event.data.streamId);
-        } else if (event.data.type == "SS_DIALOG_CANCEL") {
-            console.log("用户取消屏幕共享");
-            addDebugInfo("用户取消屏幕共享");
-        }
-    }
-});
-
-function startScreenStreamFrom(streamId) {
-    addDebugInfo(`开始屏幕共享，streamId: ${streamId}`);
-    
-    var constraints = {
-        audio: false,
-        video: {
-            mandatory: {
-                chromeMediaSource: "desktop",
-                chromeMediaSourceId: streamId,
-                maxWidth: window.screen.width,
-                maxHeight: window.screen.height
-            }
-        }
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints).then(
-        handleSuccess).catch(handleError);
-}
-
-function handleSuccess(stream) {
-    addDebugInfo("获取屏幕共享流成功");
-    
-    navigator.mediaDevices.getUserMedia({audio: true}).then(
-        function(audioStream) {
-            addDebugInfo("获取音频流成功");
-            
-            // 记录轨道状态
-            logTrackStatus();
-            
-            stream.addTrack(audioStream.getAudioTracks()[0]);
-            localVideo.srcObject = stream;
-            localStream = stream;
-            
-            addDebugInfo("将流添加到PeerConnection");
-            pc.addStream(stream);
-            
-            addDebugInfo("开始创建answer");
-            pc.createAnswer().then(
-                createSessionDescriptionSuccess,
-                createSessionDescriptionError
-            );
-        }
-    ).catch(handleError)
-}
-
-function handleError(error) {
-    console.log("get user media error: " + error);
-    addDebugInfo(`获取用户媒体错误: ${error.message}`);
-}
-
 function setRemoteDescriptionSuccess() {
-    console.log("pc set remote description success");
-    console.log("request screen share");
-    addDebugInfo("远端点描述设置成功");
-    
-    // 检查SDP包含视频信息
-    if (offer.sdp) {
-        const hasVideo = offer.sdp.includes("m=video");
-        addDebugInfo(`远端点描述包含视频: ${hasVideo}`);
-    }
-    
-    window.postMessage({type: "SS_UI_REQUEST", text: "push"}, "*");
+    console.log("pc set remote sdp success");
+    pc.createAnswer().then(
+        createSessionDescriptionSuccess,
+        createSessionDescriptionError
+    );
 }
 
 function setRemoteDescriptionError(error) {
-    console.log("pc set remote description error: " + error);
+    console.log("pc set remote sdp error: " + error);
     addDebugInfo(`远端点描述设置错误: ${error.message}`);
 }
 
@@ -331,11 +265,11 @@ function createSessionDescriptionError(error) {
 }
 
 function setLocalDescriptionSuccess() {
-    console.log("set local description success");
+    console.log("set local sdp success");
     addDebugInfo("本地描述设置成功");
 }
 
 function setLocalDescriptionError(error) {
-    console.log("pc set local description error: " + error);
+    console.log("pc set local sdp error: " + error);
     addDebugInfo(`本地描述设置错误: ${error.message}`);
 }

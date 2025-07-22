@@ -24,7 +24,7 @@ type xrtcPushReq struct {
 }
 
 type xrtcPushResp struct {
-	Errno  int    `json:"err_no"`
+	ErrNo  int    `json:"err_no"`
 	ErrMsg string `json:"err_msg"`
 	Offer  string `json:"offer"`
 }
@@ -103,9 +103,9 @@ func (*pushAction) Execute(w http.ResponseWriter, cr *framework.ComRequest) {
 		return
 	}
 
-	if resp.Errno != 0 {
+	if resp.ErrNo != 0 {
 		cerr := comerrors.New(comerrors.NetworkErr,
-			fmt.Sprintf("backend process error: %d", resp.Errno))
+			fmt.Sprintf("backend process error: %d", resp.ErrNo))
 		writeJsonErrorResponse(cerr, w, cr)
 		return
 	}
