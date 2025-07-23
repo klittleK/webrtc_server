@@ -4,7 +4,6 @@
 #include <rtc_base/zmalloc.h>
 
 #include "server/signaling_worker.h"
-#include "signaling_worker.h"
 #include "server/tcp_connection.h"
 #include "server/rtc_server.h"
 #include "xrtcserver_def.h"

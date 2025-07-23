@@ -1,7 +1,6 @@
 #include <rtc_base/logging.h>
 
 #include "pc/srtp_transport.h"
-#include "srtp_transport.h"
 
 namespace xrtc {
 
@@ -10,11 +9,12 @@ SrtpTransport::SrtpTransport(bool rtcp_mux_enabled) : _rtcp_mux_enabled(rtcp_mux
 
 }
 
-bool SrtpTransport::is_dtls_active() {
+bool SrtpTransport::is_srtp_active() {
     return _send_session && _recv_session;
 }
 
-bool SrtpTransport::set_rtp_params(int send_cs, const uint8_t *send_key, size_t send_key_len, const std::vector<int> &send_extension_ids, int recv_cs, const uint8_t *recv_key, size_t recv_key_len, const std::vector<int> &recv_extension_ids) {
+bool SrtpTransport::set_rtp_params(int send_cs, const uint8_t *send_key, size_t send_key_len, const std::vector<int> &send_extension_ids, int recv_cs, const uint8_t *recv_key, size_t recv_key_len, const std::vector<int> &recv_extension_ids)
+{
     bool new_session = false;
     if (!_send_session) {
         _create_srtp_session();
@@ -52,6 +52,19 @@ void SrtpTransport::_create_srtp_session() {
     _recv_session.reset(new SrtpSession());
 }
 
+bool SrtpTransport::unprotect_rtp(void *p, int in_len, int *out_len) {
+    if (!is_srtp_active()) {
+        RTC_LOG(LS_WARNING) << "Failed to unprotect rtp packet: no SRTP session";
+        return false;
+    }
+    return _recv_session->unprotect_rtp(p, in_len, out_len);
+}
 
+bool SrtpTransport::unprotect_rtcp(void *p, int in_len, int *out_len) {
+    if (!is_srtp_active()) {
+        return false;
+    }
+    return _recv_session->unprotect_rtcp(p, in_len, out_len);
+}
 
 }

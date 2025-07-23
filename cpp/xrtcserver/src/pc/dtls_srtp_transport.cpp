@@ -44,10 +44,58 @@ void DtlsSrtpTransport::_on_read_packet(DtlsTransport* dtls, const char* data, s
 
     rtc::CopyOnWriteBuffer packet(data, len);
     if (packet_type == RtpPacketType::k_rtcp) {
-        RTC_LOG(LS_WARNING) << "=============== rtcp packet received: " << len;
+        _on_rtcp_packet_received(std::move(packet), ts);
     } else {
-        RTC_LOG(LS_WARNING) << "=============== rtp packet received: " << len;
+        _on_rtp_packet_received(std::move(packet), ts);
     }
+}
+
+void DtlsSrtpTransport::_on_rtp_packet_received(rtc::CopyOnWriteBuffer packet, int64_t ts) {
+    if (!is_srtp_active()) {
+        RTC_LOG(LS_WARNING) << "Inactive SRTP transport received a rtp packet, drop it.";
+        return;
+    }
+
+    char* data = packet.data<char>();
+    int len = packet.size();
+
+    if (!unprotect_rtp(data, len, &len)) {
+        const int k_fail_log = 100;
+        if (_unprotect_fail_count % k_fail_log == 0) {
+            RTC_LOG(LS_WARNING) << "Failed to unprotect rtp packet: "
+                                << ", size = " << len
+                                << ", seqnum = " << parase_rtp_sequence_number(packet)
+                                << ", ssrc = " << parase_rtp_ssrc(packet)
+                                << ", unprotect_fail_count = " << _unprotect_fail_count;
+        }
+        _unprotect_fail_count++;
+        return;
+    }
+
+    packet.SetSize(len);
+    signal_rtp_packet_received(this, &packet, ts);
+}
+
+void DtlsSrtpTransport::_on_rtcp_packet_received(rtc::CopyOnWriteBuffer packet, int64_t ts) {
+    if (!is_srtp_active()) {
+        RTC_LOG(LS_WARNING) << "Inactive SRTP transport received a rtcp packet, drop it.";
+        return;
+    }
+
+    char* data = packet.data<char>();
+    int len = packet.size();
+
+    if (!unprotect_rtcp(data, len, &len)) {
+        int type = 0;
+        get_rtcp_type(data, len, &type);
+        RTC_LOG(LS_WARNING) << "Failed to unprotect rtcp packet: "
+                            << ", size = " << len
+                            << ",  type = " << type;
+        return;
+    }
+
+    packet.SetSize(len);
+    signal_rtcp_packet_received(this, &packet, ts);
 }
 
 bool DtlsSrtpTransport::is_dtls_writable() {
@@ -56,7 +104,7 @@ bool DtlsSrtpTransport::is_dtls_writable() {
 }
 
 void DtlsSrtpTransport::_maybe_setup_dtls_srtp() {
-    if (is_dtls_active() || !is_dtls_writable()) {
+    if (is_srtp_active() || !is_dtls_writable()) {
         return;
     }
 
@@ -119,6 +167,10 @@ bool DtlsSrtpTransport::_extract_params(DtlsTransport* dtls_transport,
     *recv_key = std::move(client_write_key);
 
     return true;
+}
+
+int DtlsSrtpTransport::send_rtp(const char* data, size_t len) {
+    return -1;
 }
 
 }

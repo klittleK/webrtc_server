@@ -1,7 +1,6 @@
 #include <rtc_base/zmalloc.h>
 
 #include "server/tcp_connection.h"
-#include "tcp_connection.h"
 
 namespace xrtc {
 

@@ -3,7 +3,6 @@
 #include <rtc_base/logging.h>
 
 #include "server/rtc_worker.h"
-#include "rtc_worker.h"
 #include "server/signaling_worker.h"
 
 namespace xrtc {

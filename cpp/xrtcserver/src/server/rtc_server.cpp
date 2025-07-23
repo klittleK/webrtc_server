@@ -5,7 +5,7 @@
 #include <rtc_base/crc32.h>
 #include <rtc_base/rtc_certificate_generator.h>
 
-#include "rtc_server.h"
+#include "server/rtc_server.h"
 #include "server/rtc_worker.h"
 
 namespace xrtc {

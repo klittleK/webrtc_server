@@ -9,8 +9,6 @@
 #include "base/socket.h"
 #include "ice/ice_connection.h"
 #include "ice/udp_port.h"
-#include "udp_port.h"
-
 
 namespace xrtc {
 

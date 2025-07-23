@@ -1,7 +1,7 @@
 #include <absl/algorithm/container.h>
 #include <rtc_base/logging.h>
 
-#include "peer_connection.h"
+#include "pc/peer_connection.h"
 #include "ice/ice_credentials.h"
 
 namespace xrtc {
@@ -29,8 +29,10 @@ PeerConnection::PeerConnection(EventLoop *el, PortAllocator* allocator) :
     _el(el),
     _transport_controller(new TransportController(el, allocator))
 {
-    _transport_controller->signal_candidate_allocate_done.connect(this, &PeerConnection::on_candidate_allocate_done);
+    _transport_controller->signal_candidate_allocate_done.connect(this, &PeerConnection::_on_candidate_allocate_done);
     _transport_controller->signal_connection_state.connect(this, &PeerConnection::_on_connection_state);
+    _transport_controller->signal_rtp_packet_received.connect(this, &PeerConnection::_on_rtp_packet_received);
+    _transport_controller->signal_rtcp_packet_received.connect(this, &PeerConnection::_on_rtcp_packet_received);
 }
 
 PeerConnection::~PeerConnection() {
@@ -441,7 +443,7 @@ int PeerConnection::set_remote_sdp(const std::string &sdp) {
     return 0;
 }
 
-void PeerConnection::on_candidate_allocate_done(TransportController *transport_controller, const std::string &transport_name, IceCandidateComponent component, const std::vector<Candidate> &candidates) {
+void PeerConnection::_on_candidate_allocate_done(TransportController *transport_controller, const std::string &transport_name, IceCandidateComponent component, const std::vector<Candidate> &candidates) {
     for (auto c : candidates) {
         RTC_LOG(LS_INFO) << "candidate gathered, transport_name: " << transport_name << ", " << c.to_string();
     }
@@ -458,6 +460,22 @@ void PeerConnection::on_candidate_allocate_done(TransportController *transport_c
 
 void PeerConnection::_on_connection_state(TransportController*, PeerConnectionState state) {
     signal_connection_state(this, state);
+}
+
+void PeerConnection::_on_rtp_packet_received(TransportController*, rtc::CopyOnWriteBuffer* packet, int64_t ts) {
+    signal_rtp_packet_received(this, packet, ts);
+}
+
+void PeerConnection::_on_rtcp_packet_received(TransportController*, rtc::CopyOnWriteBuffer* packet, int64_t ts) {
+    signal_rtcp_packet_received(this, packet, ts);
+}
+
+int PeerConnection::send_rtp(const char* data, size_t len) {
+    if (_transport_controller) {
+        _transport_controller->send_rtp("audio", data, len);
+    }
+
+    return -1;
 }
 
 }

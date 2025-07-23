@@ -5,8 +5,8 @@
 
 #include "server/signaling_server.h"
 #include "base/socket.h"
-#include "signaling_server.h"
-#include "signaling_worker.h"
+#include "server/signaling_server.h"
+#include "server/signaling_worker.h"
 
 namespace xrtc {
 void signaling_server_recv_notify(EventLoop* el, IOWatcher* w, int fd, int events, void* data) {

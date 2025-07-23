@@ -2,7 +2,6 @@
 #include <api/crypto/crypto_options.h>
 
 #include "pc/dtls_transport.h"
-#include "dtls_transport.h"
 
 namespace xrtc {
 

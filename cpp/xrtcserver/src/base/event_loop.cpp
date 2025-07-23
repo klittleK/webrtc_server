@@ -2,7 +2,6 @@
 
 #include "base/event_loop.h"
 #include "rtc_base/logging.h"
-#include "event_loop.h"
 
 #define TRANS_TO_EV_MASK(mask) \
     (((mask) & EventLoop::READ ? EV_READ : 0) | ((mask) & EventLoop::WRITE ? EV_WRITE : 0))

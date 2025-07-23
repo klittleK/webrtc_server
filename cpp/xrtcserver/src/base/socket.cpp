@@ -7,7 +7,6 @@
 #include <rtc_base/logging.h>
 
 #include "base/socket.h"
-#include "socket.h"
 
 namespace xrtc {
 

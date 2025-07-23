@@ -8,7 +8,6 @@
 #include <rtc_base/socket_address.h>
 
 #include "ice/stun.h"
-#include "stun.h"
 
 namespace xrtc {
 

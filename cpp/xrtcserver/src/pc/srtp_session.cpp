@@ -24,11 +24,11 @@ bool SrtpSession::update_send(int cs, const uint8_t *key, size_t key_len, const 
 }
 
 bool SrtpSession::set_recv(int cs, const uint8_t *key, size_t key_len, const std::vector<int> &extension_ids) {
-    return _set_key(ssrc_any_outbound, cs, key, key_len, extension_ids);
+    return _set_key(ssrc_any_inbound, cs, key, key_len, extension_ids);
 }
 
 bool SrtpSession::update_recv(int cs, const uint8_t *key, size_t key_len, const std::vector<int> &extension_ids) {
-    return _update_key(ssrc_any_outbound, cs, key, key_len, extension_ids);
+    return _update_key(ssrc_any_inbound, cs, key, key_len, extension_ids);
 }
 
 bool SrtpSession::_update_key(int type, int cs, const uint8_t *key, size_t key_len, const std::vector<int> &extension_ids) {
@@ -149,6 +149,61 @@ bool SrtpSession::_do_set_key(int type, int cs, const uint8_t *key, size_t key_l
 
     _rtp_auth_tag_len = policy.rtp.auth_tag_len;
     _rtcp_auth_tag_len = policy.rtcp.auth_tag_len;
+    return true;
+}
+
+bool SrtpSession::unprotect_rtp(void* p, int in_len, int* out_len) {
+    if (!_session) {
+        RTC_LOG(LS_WARNING) << "Failed to unprotect rtp packet: no SRTP session";
+        return false;
+    }
+
+    uint8_t* srtp_data = static_cast<uint8_t*>(p);
+    size_t rtp_len = static_cast<size_t>(in_len);
+
+    // 原地解密（输入输出为同一缓冲区）
+    srtp_err_status_t status = srtp_unprotect(
+        _session, 
+        srtp_data, 
+        static_cast<size_t>(in_len),
+        srtp_data, // 输出到同一缓冲区
+        &rtp_len
+    );
+
+    if (status != srtp_err_status_ok) {
+        RTC_LOG(LS_WARNING) << "srtp_unprotect failed: " << status;
+        return false;
+    }
+    
+    *out_len = static_cast<int>(rtp_len);
+    return true;
+}
+
+bool SrtpSession::unprotect_rtcp(void* p, int in_len, int* out_len) {
+    if (!_session) {
+        RTC_LOG(LS_WARNING) << "Failed to unprotect rtp packet: no SRTP session";
+        return false;
+    }
+
+    uint8_t* srtp_data = static_cast<uint8_t*>(p);
+    size_t rtp_len = static_cast<size_t>(in_len);
+
+    // 原地解密（输入输出为同一缓冲区）
+    srtp_err_status_t status = srtp_unprotect_rtcp(
+        _session, 
+        srtp_data, 
+        static_cast<size_t>(in_len),
+        srtp_data, // 输出到同一缓冲区
+        &rtp_len
+    );
+
+    if (status != srtp_err_status_ok) {
+        RTC_LOG(LS_WARNING) << "srtp_unprotect failed: " 
+                           << status;
+        return false;
+    }
+    
+    *out_len = static_cast<int>(rtp_len);
     return true;
 }
 

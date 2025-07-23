@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "candidate.h"
+#include "ice/candidate.h"
 
 namespace xrtc {
 

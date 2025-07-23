@@ -2,7 +2,7 @@
 
 #include <rtc_base/logging.h>
 
-#include "ice_agent.h"
+#include "ice/ice_agent.h"
 
 namespace xrtc {
 IceAgent::IceAgent(EventLoop *el, PortAllocator* allocator) :

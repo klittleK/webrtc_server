@@ -4,7 +4,6 @@
 #include "ice/ice_transport_channel.h"
 #include "ice/udp_port.h"
 #include "ice/ice_connection.h"
-#include "ice_transport_channel.h"
 
 namespace xrtc {
 

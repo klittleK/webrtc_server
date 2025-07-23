@@ -1,6 +1,6 @@
 #include <rtc_base/logging.h>
 
-#include "rtc_stream_manager.h"
+#include "stream/rtc_stream_manager.h"
 #include "stream/push_stream.h"
 #include "stream/pull_stream.h"
 #include "base/conf.h"
@@ -173,6 +173,19 @@ void RtcStreamManager::on_connection_state(RtcStream* stream, PeerConnectionStat
             _remove_push_stream(stream);
         }
     }
+}
+
+void RtcStreamManager::on_rtp_packet_received(RtcStream* stream, const char* data, size_t len) {
+    if (RtcStreamType::k_push == stream->stream_type()) {
+        PullStream* pull_stream = _find_pull_stream(stream->get_stream_name());
+        if (pull_stream) {
+            pull_stream->send_rtp(data, len);
+        }
+    }
+}
+
+void RtcStreamManager::on_rtcp_packet_received(RtcStream* stream, const char* data, size_t len) {
+    
 }
 
 }
