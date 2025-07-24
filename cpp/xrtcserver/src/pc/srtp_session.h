@@ -20,6 +20,9 @@ public:
     bool update_recv(int cs, const uint8_t* key, size_t key_len, const std::vector<int>& extension_ids);
     bool unprotect_rtp(void* p, int in_len, int* out_len);
     bool unprotect_rtcp(void* p, int in_len, int* out_len);
+    bool protect_rtp(void* p, int in_len, int max_len, int* out_len);
+    void get_auth_tag_len(int* rtp_auth_tag_len, int* rtcp_auth_tag_len);
+
 private:
     bool _set_key(int type, int cs, const uint8_t *key, size_t key_len, const std::vector<int> &extension_ids);
     bool _update_key(int type, int cs, const uint8_t *key, size_t key_len, const std::vector<int> &extension_ids);

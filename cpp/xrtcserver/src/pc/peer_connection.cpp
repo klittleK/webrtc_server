@@ -472,7 +472,7 @@ void PeerConnection::_on_rtcp_packet_received(TransportController*, rtc::CopyOnW
 
 int PeerConnection::send_rtp(const char* data, size_t len) {
     if (_transport_controller) {
-        _transport_controller->send_rtp("audio", data, len);
+        return _transport_controller->send_rtp("audio", data, len);
     }
 
     return -1;

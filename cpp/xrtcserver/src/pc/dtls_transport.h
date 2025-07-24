@@ -48,6 +48,8 @@ public:
     bool is_dtls_active() { return _dtls_active; }
     bool writable() { return _writable; }
 
+    int send_packet(const char* data, size_t len);
+
     bool set_local_certificate(rtc::RTCCertificate* cert);
     bool set_remote_fingerprint(const std::string& digest_alg, const uint8_t* digest, size_t digest_len);
 

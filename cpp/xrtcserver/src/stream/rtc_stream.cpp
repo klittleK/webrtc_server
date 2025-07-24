@@ -51,7 +51,7 @@ int RtcStream::set_remote_sdp(const std::string &sdp) {
 
 int RtcStream::send_rtp(const char *data, size_t len) {
     if (pc) {
-        pc->send_rtp(data, len);
+        return pc->send_rtp(data, len);
     }
     return -1;
 }

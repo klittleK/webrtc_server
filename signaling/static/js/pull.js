@@ -46,20 +46,6 @@ function addDebugInfo(message) {
     debugInfo.scrollTop = debugInfo.scrollHeight;
 }
 
-function logTrackStatus() {
-    if (!localStream) return;
-    
-    const videoTracks = localStream.getVideoTracks();
-    const audioTracks = localStream.getAudioTracks();
-    
-    addDebugInfo(`轨道状态: 视频=${videoTracks.length} 音频=${audioTracks.length}`);
-    
-    if (videoTracks.length > 0) {
-        const track = videoTracks[0];
-        addDebugInfo(`视频轨道状态: readyState=${track.readyState}, enabled=${track.enabled}, muted=${track.muted}`);
-    }
-}
-
 async function logStats() {
     if (!pc) return;
     
@@ -69,7 +55,7 @@ async function logStats() {
         let audioStats = null;
         
         stats.forEach(report => {
-            if (report.type === 'outbound-rtp') {
+            if (report.type === 'inbound-rtp') {
                 if (report.kind === 'video') {
                     videoStats = report;
                 } else if (report.kind === 'audio') {
@@ -79,13 +65,13 @@ async function logStats() {
         });
         
         if (videoStats) {
-            addDebugInfo(`视频统计: 包=${videoStats.packetsSent}, 字节=${videoStats.bytesSent}`);
+            addDebugInfo(`视频统计: 包=${videoStats.packetsReceived}, 字节=${videoStats.bytesReceived}`);
         } else {
             addDebugInfo('未找到视频发送统计');
         }
         
         if (audioStats) {
-            addDebugInfo(`音频统计: 包=${audioStats.packetsSent}, 字节=${audioStats.bytesSent}`);
+            addDebugInfo(`音频统计: 包=${audioStats.packetsReceived}, 字节=${audioStats.bytesReceived}`);
         }
     } catch (error) {
         addDebugInfo(`获取统计失败: ${error.message}`);
@@ -171,7 +157,7 @@ function sendAnswer(answerSdp) {
                 
                 // 定期检查状态
                 setInterval(() => {
-                    //logTrackStatus();
+                    //logStats();
                     logStats();
                 }, 3000);
             } else {
@@ -211,7 +197,7 @@ function pullStream() {
         // 连接成功时记录状态
         if (pc.iceConnectionState === "connected") {
             addDebugInfo("ICE连接已建立");
-            logTrackStatus();
+            logStats();
         }
     }
 

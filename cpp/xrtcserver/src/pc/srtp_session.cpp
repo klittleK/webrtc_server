@@ -152,6 +152,21 @@ bool SrtpSession::_do_set_key(int type, int cs, const uint8_t *key, size_t key_l
     return true;
 }
 
+void SrtpSession::get_auth_tag_len(int* rtp_auth_tag_len, int* rtcp_auth_tag_len) {
+    if (!_session) {
+        RTC_LOG(LS_WARNING) << "Failed to get auth tag len: no SRTP session";
+        return;
+    }
+
+    if (rtp_auth_tag_len) {
+        *rtp_auth_tag_len = _rtp_auth_tag_len;
+    }
+
+    if (rtcp_auth_tag_len) {
+        *rtcp_auth_tag_len = _rtcp_auth_tag_len;
+    }
+}
+
 bool SrtpSession::unprotect_rtp(void* p, int in_len, int* out_len) {
     if (!_session) {
         RTC_LOG(LS_WARNING) << "Failed to unprotect rtp packet: no SRTP session";
@@ -181,7 +196,7 @@ bool SrtpSession::unprotect_rtp(void* p, int in_len, int* out_len) {
 
 bool SrtpSession::unprotect_rtcp(void* p, int in_len, int* out_len) {
     if (!_session) {
-        RTC_LOG(LS_WARNING) << "Failed to unprotect rtp packet: no SRTP session";
+        RTC_LOG(LS_WARNING) << "Failed to unprotect rtcp packet: no SRTP session";
         return false;
     }
 
@@ -207,4 +222,40 @@ bool SrtpSession::unprotect_rtcp(void* p, int in_len, int* out_len) {
     return true;
 }
 
+bool SrtpSession::protect_rtp(void* p, int in_len, int max_len, int* out_len){
+    if (!_session) {
+        RTC_LOG(LS_WARNING) << "Failed to protect rtp packet: no SRTP session";
+        return false;
+    }
+
+    // 计算所需的最小缓冲区大小
+    size_t min_required_len = static_cast<size_t>(in_len) + _rtp_auth_tag_len;
+    if (static_cast<size_t>(max_len) < min_required_len) {
+        RTC_LOG(LS_WARNING) << "Failed to protect rtp packet: The buffer length " 
+                           << max_len << " is less than needed " << min_required_len;
+        return false;
+    }
+
+    // 准备调用参数
+    uint8_t* rtp_data = static_cast<uint8_t*>(p);
+    size_t srtp_len = static_cast<size_t>(max_len);
+    
+    // 调用库函数
+    srtp_err_status_t err = srtp_protect(
+        _session,         // SRTP 会话上下文
+        rtp_data,         // 输入 RTP 数据
+        static_cast<size_t>(in_len), // 输入数据长度
+        rtp_data,         // 输出 SRTP 数据（原地操作）
+        &srtp_len,        // 输入输出参数：输入为最大长度，输出为实际长度
+        0                 // MKI 索引（通常为0）
+    );
+
+    if (err != srtp_err_status_ok) {
+        return false;
+    }
+
+    *out_len = static_cast<int>(srtp_len);
+    return true;
+}
+    
 }
