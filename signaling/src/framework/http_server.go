@@ -3,8 +3,10 @@ package framework
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"signaling/src/glog"
 	"strconv"
+	"strings"
 )
 
 // 自启动的入口
@@ -77,9 +79,17 @@ func entry(w http.ResponseWriter, r *http.Request) {
 		} else {
 			responseError(w, r, http.StatusInternalServerError, "Internal server error")
 		}
-	} else {
-		responseError(w, r, http.StatusNotFound, "Not found")
+		return
 	}
+	if strings.HasPrefix(r.URL.Path, gconf.httpStaticPrefix) {
+		fs := http.FileServer(http.Dir(gconf.httpStaticDir))
+		http.StripPrefix(gconf.httpStaticPrefix, fs).ServeHTTP(w, r)
+		return
+	}
+
+	// 所有其他请求返回 Vue 应用入口
+	indexPath := filepath.Join(gconf.httpStaticDir, "index.html")
+	http.ServeFile(w, r, indexPath)
 }
 
 func RegisterStaticUrl() {
