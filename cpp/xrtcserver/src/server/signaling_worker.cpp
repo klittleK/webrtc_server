@@ -208,6 +208,9 @@ int SignalingWorker::_process_request(TcpConnection* c, const rtc::Slice& header
     case CMDNO_STOP_PUSH:
         ret = _process_stop_push(cmdno, c, root, xh->log_id);  // 同步返回，由于不需要返回什么结果，默认只要收到停止请求就算成功
         break;
+    case CMDNO_STOP_PULL:
+        ret = _process_stop_pull(cmdno, c, root, xh->log_id);
+        break;
     case CMDNO_ANSWER:
         ret = _process_answer(cmdno, c, root, xh->log_id); // 同步
         break;
@@ -333,6 +336,32 @@ int SignalingWorker::_process_stop_push(int cmdno, TcpConnection *c, const Json:
     " stream_name: " << stream_name <<
     " uid: " << uid <<
     "  signaling server send stop push request";
+
+    std::shared_ptr<RtcMsg> msg = std::make_shared<RtcMsg>();
+    msg->cmdno = cmdno;
+    msg->uid = uid;
+    msg->stream_name = stream_name;
+    msg->log_id = log_id;
+
+    return g_rtc_server->send_rtc_msg(msg);
+}
+
+int SignalingWorker::_process_stop_pull(int cmdno, TcpConnection *c, const Json::Value &root, uint32_t log_id) {
+    uint64_t uid;
+    std::string stream_name;
+
+    try {
+        uid = root["uid"].asUInt64();
+        stream_name = root["stream_name"].asString();
+    } catch (Json::Exception e) {
+        RTC_LOG(LS_WARNING) << "parse json body error: " << e.what() << "log_id: " << log_id;
+        return -1;
+    }
+
+    RTC_LOG(LS_INFO) << "cmdno: " << cmdno << 
+    " stream_name: " << stream_name <<
+    " uid: " << uid <<
+    "  signaling server send stop pull request";
 
     std::shared_ptr<RtcMsg> msg = std::make_shared<RtcMsg>();
     msg->cmdno = cmdno;
@@ -594,7 +623,7 @@ void SignalingWorker::_process_notify(int msg) {
         _process_rtc_msg();
         break;
     default:
-        RTC_LOG(LS_WARNING) << "unknow msg: " << msg;
+        RTC_LOG(LS_WARNING) << "unknown msg: " << msg;
         break;
     }
 }

@@ -150,6 +150,9 @@ void RtcWorker::_process_rtc_msg() {
         case CMDNO_STOP_PUSH:
             _process_stop_push(msg);
             break;
+        case CMDNO_STOP_PULL:
+            _process_stop_pull(msg);
+            break;
         case CMDNO_ANSWER:
             _process_answer(msg);
             break;
@@ -216,10 +219,14 @@ void RtcWorker::_process_stop_push(std::shared_ptr<RtcMsg> msg) {
                      << ", ret: " << ret;
 }
 
+void RtcWorker::_process_stop_pull(std::shared_ptr<RtcMsg> msg) {
+    int ret = _rtc_stream_mgr->stop_pull(msg->uid, msg->stream_name);
 
-
-
-
-
+    RTC_LOG(LS_INFO) << "rtc worker process stop pull, uid: " << msg->uid 
+                     << ", stream_name: " << msg->stream_name 
+                     << ", worker_id: " << _worker_id 
+                     << ", log_id: " << msg->log_id
+                     << ", ret: " << ret;
+}
 
 }

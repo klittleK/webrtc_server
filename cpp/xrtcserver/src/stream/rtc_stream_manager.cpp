@@ -71,7 +71,6 @@ int RtcStreamManager::create_pull_stream(uint64_t uid, const std::string &stream
 }
 
 int RtcStreamManager::set_answer(uint64_t uid, const std::string &stream_name, const std::string &answer, const std::string &stream_type, uint32_t log_id) {
-    RTC_LOG(LS_WARNING) << stream_type;
     if ("push" == stream_type) {
         PushStream* push_stream = _find_push_stream(stream_name);
         if (!push_stream) {
@@ -114,6 +113,11 @@ int RtcStreamManager::set_answer(uint64_t uid, const std::string &stream_name, c
 
 int RtcStreamManager::stop_push(uint64_t uid, const std::string &stream_name) {
     _remove_push_stream(uid, stream_name);
+    return 0;
+}
+
+int RtcStreamManager::stop_pull(uint64_t uid, const std::string &stream_name) {
+    _remove_pull_stream(uid, stream_name);
     return 0;
 }
 
@@ -171,6 +175,8 @@ void RtcStreamManager::on_connection_state(RtcStream* stream, PeerConnectionStat
     if (state == PeerConnectionState::k_failed) {
         if (stream->stream_type() == RtcStreamType::k_push) {
             _remove_push_stream(stream);
+        } else if (stream->stream_type() == RtcStreamType::k_pull) {
+            _remove_pull_stream(stream);
         }
     }
 }
@@ -185,7 +191,26 @@ void RtcStreamManager::on_rtp_packet_received(RtcStream* stream, const char* dat
 }
 
 void RtcStreamManager::on_rtcp_packet_received(RtcStream* stream, const char* data, size_t len) {
-    
+    if (RtcStreamType::k_push == stream->stream_type()) {
+        PullStream* pull_stream = _find_pull_stream(stream->get_stream_name());
+        if (pull_stream) {
+            pull_stream->send_rtcp(data, len);
+        }
+    } else if (RtcStreamType::k_pull == stream->stream_type()) {
+        PushStream* push_stream = _find_push_stream(stream->get_stream_name());
+        if (push_stream) {
+            push_stream->send_rtcp(data, len);
+        }
+    }
+}
+
+void RtcStreamManager::on_stream_exception(RtcStream *stream) {
+    if (RtcStreamType::k_push == stream->stream_type()) {
+        _remove_push_stream(stream);
+    } else if (RtcStreamType::k_pull == stream->stream_type()) {
+        PushStream* push_stream = _find_push_stream(stream->get_stream_name());
+        _remove_pull_stream(stream);
+    }
 }
 
 }

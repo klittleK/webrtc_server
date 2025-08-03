@@ -12,7 +12,14 @@ SrtpSession::SrtpSession()
 }
 
 SrtpSession::~SrtpSession() {
+    if (_session) {
+        srtp_set_user_data(_session, nullptr);
+        srtp_dealloc(_session);
+    }
 
+    if (_inited) {
+        _decrement_libsrtp_usage_count_and_maybe_deinit();
+    }
 }
 
 bool SrtpSession::set_send(int cs, const uint8_t *key, size_t key_len, const std::vector<int> &extension_ids) {
@@ -90,6 +97,17 @@ bool SrtpSession::_increment_libsrtp_usage_count_and_maybe_init() {
 
     g_libsrtp_usage_count++;
     return true;
+}
+
+void SrtpSession::_decrement_libsrtp_usage_count_and_maybe_deinit() {
+    webrtc::GlobalMutexLock ls(&g_libsrtp_lock);
+    --g_libsrtp_usage_count;
+    if (0 == g_libsrtp_usage_count) {
+        int err = srtp_shutdown();
+        if (err) {
+            RTC_LOG(LS_WARNING) << "Failed to shutdowm, err: " << err;
+        }
+    }
 }
 
 bool SrtpSession::_set_key(int type, int cs, const uint8_t *key, size_t key_len, const std::vector<int> &extension_ids) {
@@ -251,6 +269,7 @@ bool SrtpSession::protect_rtp(void* p, int in_len, int max_len, int* out_len){
     );
 
     if (err != srtp_err_status_ok) {
+        RTC_LOG(LS_WARNING) << "Failed to protect rtp packet: err=" << err;
         return false;
     }
 
@@ -258,4 +277,41 @@ bool SrtpSession::protect_rtp(void* p, int in_len, int max_len, int* out_len){
     return true;
 }
     
+bool SrtpSession::protect_rtcp(void* p, int in_len, int max_len, int* out_len){
+    if (!_session) {
+        RTC_LOG(LS_WARNING) << "Failed to protect rtcp packet: no SRTP session";
+        return false;
+    }
+
+    // 计算所需的最小缓冲区大小
+    size_t min_required_len = static_cast<size_t>(in_len) + _rtcp_auth_tag_len + sizeof(uint32_t);
+    if (static_cast<size_t>(max_len) < min_required_len) {
+        RTC_LOG(LS_WARNING) << "Failed to protect rtcp packet: The buffer length " 
+                           << max_len << " is less than needed " << min_required_len;
+        return false;
+    }
+
+    // 准备调用参数
+    uint8_t* rtcp_data = static_cast<uint8_t*>(p);
+    size_t srtp_len = static_cast<size_t>(max_len);
+    
+    // 调用库函数
+    srtp_err_status_t err = srtp_protect_rtcp(
+        _session,         // SRTP 会话上下文
+        rtcp_data,         // 输入 RTCP 数据
+        static_cast<size_t>(in_len), // 输入数据长度
+        rtcp_data,         // 输出 SRTP 数据（原地操作）
+        &srtp_len,        // 输入输出参数：输入为最大长度，输出为实际长度
+        0                 // MKI 索引（通常为0）
+    );
+
+    if (err != srtp_err_status_ok) {
+        RTC_LOG(LS_WARNING) << "Failed to protect rtcp packet: err=" << err;
+        return false;
+    }
+
+    *out_len = static_cast<int>(srtp_len);
+    return true;
+}
+
 }

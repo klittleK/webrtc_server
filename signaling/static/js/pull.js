@@ -109,11 +109,11 @@ function stopPull() {
     console.log("send stop pull: /signaling/stoppull");
 
     remoteVideo.srcObject = null;
-    if (remoteStream && localStream.getAudioTracks()) {
+    if (remoteStream && remoteStream.getAudioTracks()) {
         remoteStream.getAudioTracks()[0].stop();
     }
 
-    if (remoteStream && localStream.getVideoTracks()) {
+    if (remoteStream && remoteStream.getVideoTracks()) {
         remoteStream.getVideoTracks()[0].stop();
     }
 
