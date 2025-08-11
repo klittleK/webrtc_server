@@ -11,4 +11,7 @@ func init() {
 	framework.GActionRouter["/signaling/pull"] = action.NewPullAction()
 	framework.GActionRouter["/signaling/stoppull"] = action.NewStopPullAction()
 	framework.GActionRouter["/signaling/sendanswer"] = action.NewSendAnswerAction()
+
+	framework.GActionRouter["/api/user/login"] = action.NewLoginAction()
+	framework.GActionRouter["/api/user/info"] = action.NewUserInfoAction()
 }

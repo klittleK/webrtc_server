@@ -3,6 +3,7 @@ package framework
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"signaling/src/glog"
 	"strconv"
@@ -81,10 +82,29 @@ func entry(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
+
+	// 处理静态资源请求
 	if strings.HasPrefix(r.URL.Path, gconf.httpStaticPrefix) {
-		fs := http.FileServer(http.Dir(gconf.httpStaticDir))
-		http.StripPrefix(gconf.httpStaticPrefix, fs).ServeHTTP(w, r)
-		return
+		// 获取相对路径
+		relativePath := strings.TrimPrefix(r.URL.Path, "/")
+		fmt.Println("相对路径", relativePath)
+		// 构建完整文件路径
+		filePath := filepath.Join(gconf.httpStaticDir, relativePath)
+		fmt.Println("完整文件路径", filePath)
+
+		// 检查文件是否存在
+		if _, err := os.Stat(filePath); !os.IsNotExist(err) {
+			fmt.Println("文件存在")
+			// 设置正确的 MIME 类型
+			if strings.HasSuffix(filePath, ".js") {
+				w.Header().Set("Content-Type", "application/javascript")
+			} else if strings.HasSuffix(filePath, ".css") {
+				w.Header().Set("Content-Type", "text/css")
+			}
+
+			http.ServeFile(w, r, filePath)
+			return
+		}
 	}
 
 	// 所有其他请求返回 Vue 应用入口

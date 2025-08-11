@@ -14,7 +14,7 @@ func main() {
 	}
 
 	// 静态资源处理
-	framework.RegisterStaticUrl()
+	// framework.RegisterStaticUrl()
 
 	// 启动http server
 	go startHttp()

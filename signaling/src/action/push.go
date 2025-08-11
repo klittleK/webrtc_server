@@ -36,7 +36,6 @@ type pushData struct {
 
 func (*pushAction) Execute(w http.ResponseWriter, cr *framework.ComRequest) {
 	r := cr.R
-
 	// uid
 	var strUid string
 	if values, ok := r.Form["uid"]; ok {
