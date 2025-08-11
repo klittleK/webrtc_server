@@ -56,6 +56,11 @@ VideoContentDescription::VideoContentDescription() {
     rtx_codec->codec_param["apt"] = std::to_string(codec->id);
 }
 
+DataContentDescription::DataContentDescription() {
+    set_direction(RtpDirection::k_send_recv);
+    set_rtcp_mux(true);
+}
+
 SessionDescription::SessionDescription(SdpType type) :
     _sdp_type(type)
 {
@@ -322,9 +327,15 @@ std::string SessionDescription::to_string() {
             fmt.append(" ");
             fmt.append(std::to_string(codec->id));
         }
-        ss << "m=" << content->mid() << " 9 " << k_media_protocol_dtls_savpf << fmt << "\r\n";
-        ss << "c=IN IP4 0.0.0.0\r\n";
-        ss << "a=rtcp:9 IN IP4 0.0.0.0\r\n";
+        if (content->type() == MediaType::MEDIA_TYPE_APPLICATION) {
+            auto data_content = dynamic_cast<DataContentDescription*>(content.get());
+            ss << "m=" << "application" << " 9 " << data_content->protocol() << " " << data_content->format() << "\r\n";
+            ss << "c=IN IP4 0.0.0.0\r\n";
+        } else {
+            ss << "m=" << content->mid() << " 9 " << k_media_protocol_dtls_savpf << fmt << "\r\n";
+            ss << "c=IN IP4 0.0.0.0\r\n";
+            ss << "a=rtcp:9 IN IP4 0.0.0.0\r\n";
+        }
 
         build_candidates(content, ss);
 
@@ -342,6 +353,11 @@ std::string SessionDescription::to_string() {
 
         ss << "a=mid:" << content->mid() << "\r\n";
         
+        if (content->type() == MediaType::MEDIA_TYPE_APPLICATION) {
+            ss << "a=sctp-port:" << content->sctp_port() << "\r\n";
+            ss << "a=max-message-size:" << content->max_message_size() << "\r\n";
+            continue;
+        }
         build_rtp_direction(content, ss);
 
         if(content->rtcp_mux()) {

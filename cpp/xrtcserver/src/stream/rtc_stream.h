@@ -22,6 +22,7 @@ public:
     virtual void on_connection_state(RtcStream* stream, PeerConnectionState state) = 0;
     virtual void on_rtp_packet_received(RtcStream* stream, const char* data, size_t len) = 0;
     virtual void on_rtcp_packet_received(RtcStream* stream, const char* data, size_t len) = 0;
+    virtual void on_sctp_packet_received(RtcStream* stream, const char* data, size_t len) = 0;
     virtual void on_stream_exception(RtcStream* stream) = 0;
 };
 
@@ -46,6 +47,7 @@ public:
 
     int send_rtp(const char* data, size_t len);
     int send_rtcp(const char* data, size_t len);
+    int send_sctp(const char* data, size_t len);
 
     std::string to_string();
 
@@ -53,6 +55,7 @@ private:
     void _on_connection_state(PeerConnection*, PeerConnectionState state);
     void _on_rtp_packet_received(PeerConnection*, rtc::CopyOnWriteBuffer* packet, int64_t ts);
     void _on_rtcp_packet_received(PeerConnection*, rtc::CopyOnWriteBuffer* packet, int64_t ts);
+    void _on_sctp_packet_received(PeerConnection*, void* data, size_t len, int64_t ts);
 
 protected:
     EventLoop* el;

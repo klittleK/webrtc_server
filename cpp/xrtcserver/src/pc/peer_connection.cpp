@@ -33,6 +33,7 @@ PeerConnection::PeerConnection(EventLoop *el, PortAllocator* allocator) :
     _transport_controller->signal_connection_state.connect(this, &PeerConnection::_on_connection_state);
     _transport_controller->signal_rtp_packet_received.connect(this, &PeerConnection::_on_rtp_packet_received);
     _transport_controller->signal_rtcp_packet_received.connect(this, &PeerConnection::_on_rtcp_packet_received);
+    _transport_controller->signal_sctp_packet_received.connect(this, &PeerConnection::_on_sctp_packet_received);
 }
 
 PeerConnection::~PeerConnection() {
@@ -102,6 +103,10 @@ std::string PeerConnection::create_offer(const RTCOfferAnswerOptions &options) {
             }
         }
     }
+
+    auto datachannel = std::make_shared<DataContentDescription>();
+    _local_desc->add_content(datachannel);
+    _local_desc->add_transport_info(datachannel->mid(), ice_param, _certificate);
 
     if(options.use_rtp_mux) {
         ContentGroup offer_bundle("BUNDLE");
@@ -470,6 +475,11 @@ void PeerConnection::_on_rtcp_packet_received(TransportController*, rtc::CopyOnW
     signal_rtcp_packet_received(this, packet, ts);
 }
 
+void PeerConnection::_on_sctp_packet_received(TransportController*, void* data, size_t len, int64_t ts) {
+    RTC_LOG(LS_INFO) << "PeerConnection::_on_sctp_packet_received";
+    signal_sctp_packet_received(this, data, len, ts);
+}
+
 int PeerConnection::send_rtp(const char* data, size_t len) {
     if (_transport_controller) {
         return _transport_controller->send_rtp("audio", data, len);
@@ -481,6 +491,15 @@ int PeerConnection::send_rtp(const char* data, size_t len) {
 int PeerConnection::send_rtcp(const char* data, size_t len) {
     if (_transport_controller) {
         return _transport_controller->send_rtcp("audio", data, len);
+    }
+
+    return -1;
+}
+
+int PeerConnection::send_sctp(const char* data, size_t len) {
+    RTC_LOG(LS_INFO) << "PeerConnection send sctp";
+    if (_transport_controller) {
+        return _transport_controller->send_sctp("audio", data, len);
     }
 
     return -1;

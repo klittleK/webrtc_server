@@ -1,4 +1,5 @@
 #include <rtc_base/logging.h>
+#include <rtc_base/time_utils.h>
 #include <api/crypto/crypto_options.h>
 
 #include "pc/dtls_transport.h"
@@ -32,6 +33,24 @@ bool is_rtp_packet(const char* buf, size_t len) {
     return len >= k_min_rtp_packet_len && (u[0] & 0xC0) == 0x80;
 }
 
+bool is_sctp_packet(const char* buf, size_t len) {
+    RTC_LOG(LS_WARNING) <<  ": judge sctp packets";
+    RTC_LOG(LS_WARNING) << len << " ";
+    if (len < 12) return false; // SCTP公共头部最小长度
+    
+    const uint8_t* u = reinterpret_cast<const uint8_t*>(buf);
+    
+    // 检查源端口和目的端口
+    uint16_t src_port = (u[0] << 8) | u[1];
+    uint16_t dst_port = (u[2] << 8) | u[3];
+    RTC_LOG(LS_WARNING) << src_port << " " << dst_port;
+    RTC_LOG(LS_WARNING) << src_port << " " << dst_port;
+    if (src_port == 5000 && dst_port == 5000) {
+        return true;
+    }
+    return false;
+}
+
 StreamInterfaceChannel::StreamInterfaceChannel(IceTransportChannel *ice_channel) :
     _ice_channel(ice_channel),
     _packets(k_max_pending_packets, k_max_dtls_packet_len)
@@ -57,15 +76,18 @@ rtc::StreamState StreamInterfaceChannel::GetState() const {
 }
 
 rtc::StreamResult StreamInterfaceChannel::Read(void* buffer, size_t buffer_len, size_t* read, int* error) {
+    // 不会被直接调用，提供给SSLStreamAdapter（dtls_）用的底层通讯手段，告知dtls_读数据的方式
     if (_state == rtc::SS_CLOSED) {
         return rtc::SR_EOS;
     }
 
     if (_state == rtc::SS_OPENING) {
+        RTC_LOG(LS_WARNING) << "_state == rtc::SS_OPENING";
         return rtc::SR_BLOCK;
     }
 
     if (!_packets.ReadFront(buffer, buffer_len, read)) {
+        RTC_LOG(LS_WARNING) << "ReadFront failed";
         return rtc::SR_BLOCK;
     }
 
@@ -73,6 +95,7 @@ rtc::StreamResult StreamInterfaceChannel::Read(void* buffer, size_t buffer_len, 
 }
 
 rtc::StreamResult StreamInterfaceChannel::Write(const void* data, size_t data_len, size_t* written, int* error) {
+    // 不会被直接调用，是提供给SSLStreamAdapter（dtls_）用的底层通讯手段，dtls_加密后才会去调用这个
     _ice_channel->send_packet(static_cast<const char*>(data), data_len);
     if (written) {
         *written = data_len;
@@ -131,7 +154,7 @@ void DtlsTransport::_on_read_packet(IceTransportChannel *channel, const char *bu
                     RTC_LOG(LS_WARNING) << to_string() << ": handle DTLS packet failed";
                     return;
                 }
-            } else { // 不是DTLS包, RTP或RTCP包
+            } else { // 不是DTLS包, 是RTP或RTCP包
                 if (_dtls_state != DtlsTransportState::k_connected) {
                     RTC_LOG(LS_WARNING) << to_string() << ": Received non DTLS packet before DTLS complete";
                     return;
@@ -140,9 +163,8 @@ void DtlsTransport::_on_read_packet(IceTransportChannel *channel, const char *bu
                 if (!is_rtp_packet(buf, len)) {
                     RTC_LOG(LS_WARNING) << to_string() << ": Received unexpected non DTLS complete";
                     return;
-                }
-
-                signal_read_packet(this, buf, len, ts);
+                } 
+                signal_read_media_packet(this, buf, len, ts);
             }
 
             break;
@@ -324,13 +346,16 @@ void DtlsTransport::_on_dtls_event(rtc::StreamInterface* dtls, int sig, int erro
 
     if (sig & rtc::SE_READ) {
         char buf[k_max_dtls_packet_len];
-        size_t read;
+        size_t read = 0;
         int read_error;
         rtc::StreamResult ret;
         do {
             ret = _dtls->Read(buf, sizeof(buf), &read, &read_error);
             if (ret == rtc::SR_SUCCESS) {
-
+                // DTLS 是单独的包不会合并，这里Read读取只要返回SR_SUCCESS，那就必定是一个完整的DTLS包，read就是长度
+                if (is_sctp_packet(buf, read)) {
+                    signal_read_data_packet(this, buf, read, rtc::TimeMillis());
+                }
             } else if (ret == rtc::SR_EOS) {
                 RTC_LOG(LS_INFO) << to_string() << ": DTLS transport closed by remote.";
                 _set_writable_state(false);
@@ -430,7 +455,26 @@ bool DtlsTransport::export_keying_material(const std::string &label, const uint8
     return _dtls.get() ? _dtls->ExportKeyingMaterial(label, context, context_len, use_context, result, result_len) : false;
 }
 
-int DtlsTransport::send_packet(const char* data, size_t len) {
+int DtlsTransport::send_encrypted_data(const char *data, size_t len) {
+    if (!_dtls || _dtls_state != DtlsTransportState::k_connected) {
+        RTC_LOG(LS_WARNING) << "Cannot send: DTLS not connected";
+        return -1;
+    }
+    
+    size_t written;
+    int error;
+    rtc::StreamResult result = _dtls->Write(data, len, &written, &error);
+    
+    if (result != rtc::SR_SUCCESS) {
+        RTC_LOG(LS_WARNING) << "DTLS write failed: " << error;
+        return -1;
+    }
+    
+    return written;
+}
+
+int DtlsTransport::send_packet(const char *data, size_t len) {
+    // 直接发数据，用于SRTP
     if (_ice_channel) {
         return _ice_channel->send_packet(data, len);
     }

@@ -19,7 +19,7 @@ void DtlsSrtpTransport::set_dtls_transports(DtlsTransport *rtp_dtls_transport, D
 
     if (_rtp_dtls_transport) {
         _rtp_dtls_transport->signal_dtls_state.connect(this, &DtlsSrtpTransport::_on_dtls_state);
-        _rtp_dtls_transport->signal_read_packet.connect(this, &DtlsSrtpTransport::_on_read_packet);
+        _rtp_dtls_transport->signal_read_media_packet.connect(this, &DtlsSrtpTransport::_on_read_packet);
     }
 
     _maybe_setup_dtls_srtp();

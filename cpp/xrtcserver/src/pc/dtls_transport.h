@@ -49,6 +49,7 @@ public:
     bool writable() { return _writable; }
 
     int send_packet(const char* data, size_t len);
+    int send_encrypted_data(const char *data, size_t len);
 
     bool set_local_certificate(rtc::RTCCertificate* cert);
     bool set_remote_fingerprint(const std::string& digest_alg, const uint8_t* digest, size_t digest_len);
@@ -61,7 +62,8 @@ public:
     sigslot::signal2<DtlsTransport*, DtlsTransportState> signal_dtls_state;
     sigslot::signal1<DtlsTransport*> signal_writable_state;
     sigslot::signal1<DtlsTransport*> signal_receiving_state;
-    sigslot::signal4<DtlsTransport*, const char*, size_t, int64_t> signal_read_packet;
+    sigslot::signal4<DtlsTransport*, const char*, size_t, int64_t> signal_read_media_packet;
+    sigslot::signal4<DtlsTransport*, const char*, size_t, int64_t> signal_read_data_packet;
     sigslot::signal1<DtlsTransport*> signal_closed;
 
 private:
@@ -91,14 +93,10 @@ private:
     std::string _remote_fingerprint_alg;
     bool _dtls_active = false; // 是否处于DTLS活动状态
     std::vector<int> _srtp_ciphers; // 支持的SRTPCipher列表
+
+    // 加密上下文缓存
+    std::vector<uint8_t> _encrypt_buffer;
+    std::vector<uint8_t> _decrypt_buffer;
 };
-
-
-
-
-
-
-
-
 
 }

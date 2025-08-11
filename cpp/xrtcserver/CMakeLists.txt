@@ -39,6 +39,6 @@ target_link_libraries(xrtcserver libyaml-cpp.a librtcbase.a
     libssl.a
     libcrypto.a
     libsrtp3.a
+    libusrsctp.a
     -lpthread -ldl
-    
 )

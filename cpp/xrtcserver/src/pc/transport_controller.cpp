@@ -3,6 +3,8 @@
 #include "pc/transport_controller.h"
 #include "pc/dtls_transport.h"
 #include "pc/dtls_srtp_transport.h"
+#include "pc/dtls_sctp_transport.h"
+
 
 namespace xrtc {
 
@@ -35,18 +37,26 @@ int TransportController::set_local_description(SessionDescription *desc) {
         RTC_LOG(LS_WARNING) << "desc is null";
         return -1;
     }
-
+    
+    // 查所有媒体段的mid，如果是在聚合中，只处理第一个的通道就行
     for (auto content : desc->contents()) {
         std::string mid = content->mid();
         if (desc->is_bundle(mid) && mid != desc->get_first_bundle_mid()) {
             continue;
         }
+
+        if (content->type() == MediaType::MEDIA_TYPE_APPLICATION) {
+            continue;
+        }
+
+        // 创建ICE通道
         _ice_agent->create_channel(_el, mid, IceCandidateComponent::RTP);
         auto td = desc->get_transport_info(mid);
         if (td) {
             _ice_agent->set_ice_params(mid, IceCandidateComponent::RTP, IceParameters(td->ice_ufrag, td->ice_pwd));
         }
 
+        // 创建DTLS传输
         DtlsTransport* dtls = new DtlsTransport(_ice_agent->get_channel(mid, IceCandidateComponent::RTP));
         dtls->set_local_certificate(_local_certificate);
         dtls->signal_receiving_state.connect(this, &TransportController::_on_dtls_receiving_state);
@@ -55,7 +65,17 @@ int TransportController::set_local_description(SessionDescription *desc) {
         _ice_agent->signal_ice_state.connect(this, &TransportController::_on_ice_state);
         _add_dtls_transport(dtls);
 
-        DtlsSrtpTransport* dtls_srtp = new DtlsSrtpTransport(dtls->transport_name(), true);
+        // 处理DataChannel - 创建SCTP传输
+        RTC_LOG(LS_INFO) << "Creating SCTP transport for DataChannel";
+
+        // 创建SCTP传输
+        DtlsSctpTransport* dtls_sctp = new DtlsSctpTransport(dtls->transport_name());
+        dtls_sctp->set_dtls_transport(dtls);
+        dtls_sctp->signal_sctp_data_received.connect(this, &TransportController::_on_datachannel_received);
+
+        // 添加到SCTP传输列表
+        _add_dtls_sctp_transport(dtls_sctp);
+        DtlsSrtpTransport *dtls_srtp = new DtlsSrtpTransport(dtls->transport_name(), true);
         dtls_srtp->set_dtls_transports(dtls, nullptr);
         dtls_srtp->signal_rtp_packet_received.connect(this, &TransportController::_on_rtp_packet_received);
         dtls_srtp->signal_rtcp_packet_received.connect(this, &TransportController::_on_rtcp_packet_received);
@@ -75,6 +95,11 @@ void TransportController::_on_rtp_packet_received(DtlsSrtpTransport*, rtc::CopyO
 
 void TransportController::_on_rtcp_packet_received(DtlsSrtpTransport*, rtc::CopyOnWriteBuffer* packet, int64_t ts) {
     signal_rtcp_packet_received(this, packet, ts);
+}
+
+void TransportController::_on_datachannel_received(DtlsSctpTransport*, void* data, size_t len, int64_t ts) {
+    RTC_LOG(LS_INFO) << "TransportController::_on_datachannel_received";
+    signal_sctp_packet_received(this, data, len, ts);
 }
 
 void TransportController::_on_dtls_receiving_state(DtlsTransport*) {
@@ -169,6 +194,24 @@ DtlsSrtpTransport* TransportController::_get_dtls_srtp_transport(const std::stri
     return nullptr;
 }
 
+void TransportController::_add_dtls_sctp_transport(DtlsSctpTransport *dtls_sctp) {
+    auto iter = _dtls_sctp_transport_by_name.find(dtls_sctp->transport_name());
+    if (iter != _dtls_sctp_transport_by_name.end()) {
+        delete iter->second; // 删除旧的
+    }
+
+    _dtls_sctp_transport_by_name[dtls_sctp->transport_name()] = dtls_sctp;
+}
+
+DtlsSctpTransport* TransportController::_get_dtls_sctp_transport(const std::string& transport_name) {
+    auto iter = _dtls_sctp_transport_by_name.find(transport_name);
+    if (iter != _dtls_sctp_transport_by_name.end()) {
+        return iter->second;
+    }
+
+    return nullptr;
+}
+
 int TransportController::set_remote_description(SessionDescription *desc) {
     if (!desc) {
         return -1;
@@ -216,6 +259,14 @@ int TransportController::send_rtcp(const std::string& transport_name, const char
     auto dtls_srtp = _get_dtls_srtp_transport(transport_name);
     if (dtls_srtp) {
         return dtls_srtp->send_rtcp(data, len);
+    }
+    return -1;
+}
+
+int TransportController::send_sctp(const std::string& transport_name, const char* data, size_t len) {
+    auto dtls_sctp = _get_dtls_sctp_transport(transport_name);
+    if (dtls_sctp) {
+        return dtls_sctp->packet_and_send_dtls_sctp(data, len);
     }
     return -1;
 }

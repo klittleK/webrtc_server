@@ -45,10 +45,12 @@ public:
 
     int send_rtp(const char* data, size_t len);
     int send_rtcp(const char* data, size_t len);
+    int send_sctp(const char* data, size_t len);
 
     sigslot::signal2<PeerConnection*, PeerConnectionState> signal_connection_state;
     sigslot::signal3<PeerConnection*, rtc::CopyOnWriteBuffer*, int64_t> signal_rtp_packet_received;
     sigslot::signal3<PeerConnection*, rtc::CopyOnWriteBuffer*, int64_t> signal_rtcp_packet_received;
+    sigslot::signal4<PeerConnection*, void*, size_t, int64_t> signal_sctp_packet_received;
 
 private:
     ~PeerConnection();
@@ -57,6 +59,7 @@ private:
     void _on_connection_state(TransportController*, PeerConnectionState state);
     void _on_rtp_packet_received(TransportController*, rtc::CopyOnWriteBuffer* packet, int64_t ts);
     void _on_rtcp_packet_received(TransportController*, rtc::CopyOnWriteBuffer* packet, int64_t ts);
+    void _on_sctp_packet_received(TransportController*, void* data, size_t len, int64_t ts);
 
     friend void destroy_timer_cb(EventLoop* el, TimerWatcher* w, void* data);
 

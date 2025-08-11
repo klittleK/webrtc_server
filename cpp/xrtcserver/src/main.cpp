@@ -63,7 +63,6 @@ int init_rtc_server() {
 }
 
 static void process_signal(int sig) {
-    RTC_LOG(LS_INFO) << "receive signal: " << sig;
     if(SIGINT == sig || SIGTERM == sig) {
         if(g_signaling_server) {
             g_signaling_server->stop();

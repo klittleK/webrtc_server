@@ -12,6 +12,7 @@ RtcStream::RtcStream(EventLoop *el, PortAllocator* allocator, uint64_t uid, cons
     pc->signal_connection_state.connect(this, &RtcStream::_on_connection_state);
     pc->signal_rtp_packet_received.connect(this, &RtcStream::_on_rtp_packet_received);
     pc->signal_rtcp_packet_received.connect(this, &RtcStream::_on_rtcp_packet_received);
+    pc->signal_sctp_packet_received.connect(this, &RtcStream::_on_sctp_packet_received);
 }
 
 RtcStream::~RtcStream() {
@@ -55,6 +56,10 @@ void RtcStream::_on_rtcp_packet_received(PeerConnection*, rtc::CopyOnWriteBuffer
     }
 }
 
+void RtcStream::_on_sctp_packet_received(PeerConnection*, void* data, size_t len, int64_t ts) {
+    _listener->on_sctp_packet_received(this, (const char*)data, len);
+}
+
 void ice_timeout_cb(EventLoop* el, TimerWatcher* w, void* data) {
     RtcStream* stream = (RtcStream*)data;
     if (stream->_state != PeerConnectionState::k_connected) {
@@ -84,6 +89,13 @@ int RtcStream::send_rtp(const char *data, size_t len) {
 int RtcStream::send_rtcp(const char *data, size_t len) {
     if (pc) {
         return pc->send_rtcp(data, len);
+    }
+    return -1;
+}
+
+int RtcStream::send_sctp(const char *data, size_t len) {
+    if (pc) {
+        return pc->send_sctp(data, len);
     }
     return -1;
 }

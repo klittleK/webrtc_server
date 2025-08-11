@@ -204,6 +204,20 @@ void RtcStreamManager::on_rtcp_packet_received(RtcStream* stream, const char* da
     }
 }
 
+void RtcStreamManager::on_sctp_packet_received(RtcStream* stream, const char* data, size_t len) {
+    if (RtcStreamType::k_push == stream->stream_type()) {
+        PullStream* pull_stream = _find_pull_stream(stream->get_stream_name());
+        if (pull_stream) {
+            pull_stream->send_sctp(data, len);
+        }
+    } else if (RtcStreamType::k_pull == stream->stream_type()) {
+        PushStream* push_stream = _find_push_stream(stream->get_stream_name());
+        if (push_stream) {
+            push_stream->send_sctp(data, len);
+        }
+    }
+}
+
 void RtcStreamManager::on_stream_exception(RtcStream *stream) {
     if (RtcStreamType::k_push == stream->stream_type()) {
         _remove_push_stream(stream);

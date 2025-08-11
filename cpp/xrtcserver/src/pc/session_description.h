@@ -20,7 +20,8 @@ enum class SdpType {
 
 enum class MediaType {
     MEDIA_TYPE_AUDIO,
-    MEDIA_TYPE_VIDEO
+    MEDIA_TYPE_VIDEO,
+    MEDIA_TYPE_APPLICATION // 用于datachannel
 };
 
 enum class RtpDirection {
@@ -46,30 +47,26 @@ public:
     void set_rtcp_mux(bool mux){_rtcp_mux = mux;}
 
     const std::vector<Candidate>& candidates() {return _candidates;}
-    void add_candidates(const std::vector<Candidate>& candidates) {
-        _candidates = candidates;
-    }
+    void add_candidates(const std::vector<Candidate>& candidates) { _candidates = candidates; }
 
     const std::vector<StreamParams>& streams() { return _send_streams; }
-    void add_stream(const StreamParams& stream) {
-        _send_streams.push_back(stream);
-    }
+    void add_stream(const StreamParams& stream) { _send_streams.push_back(stream); }
 
-    void set_stream_id(const std::string& stream_id) {
-        _stream_id = stream_id;
-    }
+    void set_stream_id(const std::string& stream_id) { _stream_id = stream_id; }
 
-    const std::string& stream_id() const {
-        return _stream_id;
-    }
+    const std::string& stream_id() const { return _stream_id; }
 
-    void set_track_id(const std::string& track_id) {
-        _track_id = track_id;
-    }
+    void set_track_id(const std::string& track_id) { _track_id = track_id; }
 
-    const std::string& track_id() const {
-        return _track_id;
-    }
+    const std::string& track_id() const { return _track_id; }
+
+    // SCTP端口和最大消息大小属性
+    uint16_t sctp_port() const { return _sctp_port; }
+    void set_sctp_port(uint16_t port) { _sctp_port = port; }
+    
+    uint32_t max_message_size() const { return _max_message_size; }
+    void set_max_message_size(uint32_t size) { _max_message_size = size; }
+
 
 protected:
     std::vector<std::shared_ptr<CodecInfo>> _codecs;
@@ -79,6 +76,10 @@ protected:
     std::vector<StreamParams> _send_streams;
     std::string _stream_id;
     std::string _track_id;
+
+    // DataChannel相关属性
+    uint16_t _sctp_port = 5000; // 默认SCTP端口
+    uint32_t _max_message_size = 262144; // 默认最大消息大小
 };
 
 class AudioContentDescription : public MediaContentDescription {
@@ -94,6 +95,24 @@ public:
     MediaType type() override {return MediaType::MEDIA_TYPE_VIDEO;}
     std::string mid() override {return "video";}
 };
+
+class DataContentDescription : public MediaContentDescription {
+    public:
+        DataContentDescription();
+        MediaType type() override {return MediaType::MEDIA_TYPE_APPLICATION;}
+        std::string mid() override {return "datachannel";}
+        
+        // 协议和格式属性
+        const std::string& protocol() const { return _protocol; }
+        void set_protocol(const std::string& protocol) { _protocol = protocol; }
+        
+        const std::string& format() const { return _format; }
+        void set_format(const std::string& format) { _format = format; }
+    
+    private:
+        std::string _protocol = "UDP/DTLS/SCTP"; // 默认协议
+        std::string _format = "webrtc-datachannel"; // 默认格式
+    };
 
 class ContentGroup {
 public:
