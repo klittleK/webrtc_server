@@ -138,9 +138,9 @@ static std::string get_attribute(const std::string& line) {
 static int parse_transport_info(TransportDescription* td,const std::string& line) {
     if (line.find("a=ice-ufrag") != std::string::npos) {
         td->ice_ufrag = get_attribute(line);
-	if (td->ice_ufrag.empty()) {
-	    return -1;
-	}
+	    if (td->ice_ufrag.empty()) {
+	        return -1;
+	    }
     } else if (line.find("a=ice-pwd") != std::string::npos) {
         td->ice_pwd = get_attribute(line);
         if (td->ice_pwd.empty()) {
@@ -148,21 +148,22 @@ static int parse_transport_info(TransportDescription* td,const std::string& line
         }
     } else if (line.find("a=fingerprint") != std::string::npos) {
         std::vector<std::string> items;
-	rtc::tokenize(line, ' ', &items);
-	if (items.size() != 2) {
-	    RTC_LOG(LS_WARNING) << "parse a=fingerprint error: " << line;
-	    return -1;
-	}
+	    rtc::tokenize(line, ' ', &items);
 
-	std::string alg = items[0].substr(14);
-	absl::c_transform(alg, alg.begin(), ::tolower);
-	std::string content = items[1];
+	    if (items.size() != 2) {
+	        RTC_LOG(LS_WARNING) << "parse a=fingerprint error: " << line;
+	        return -1;
+	    }
 
-	td->identity_fingerprint = rtc::SSLFingerprint::CreateUniqueFromRfc4572(alg, content);
-	if (!(td->identity_fingerprint.get())) {
-	    RTC_LOG(LS_WARNING) << "create fingerprint error: "  << line;
-	    return -1;
-	}
+	    std::string alg = items[0].substr(14);
+	    absl::c_transform(alg, alg.begin(), ::tolower);
+	    std::string content = items[1];
+
+	    td->identity_fingerprint = rtc::SSLFingerprint::CreateUniqueFromRfc4572(alg, content);
+	    if (!(td->identity_fingerprint.get())) {
+	        RTC_LOG(LS_WARNING) << "create fingerprint error: "  << line;
+	        return -1;
+	    }
     }
     return 0;
 }
@@ -334,7 +335,7 @@ int PeerConnection::set_remote_sdp(const std::string &sdp) {
 
     _remote_desc = std::make_unique<SessionDescription>(SdpType::k_answer);
 
-    std:: string media_type;
+    std:: string media_type = "audio";
 
     auto audio_content = std::make_shared<AudioContentDescription>();
     auto video_content = std::make_shared<VideoContentDescription>();

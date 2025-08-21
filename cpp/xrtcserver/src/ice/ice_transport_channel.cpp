@@ -210,7 +210,6 @@ void IceTransportChannel::_set_receiving(bool receiving) {
 void IceTransportChannel::_update_state() {
     bool writable = _selected_connection && _selected_connection->writable();
     _set_writable(writable);
-
     bool receiving = false;
     for (auto conn : _ice_controller->connections()) {
         if (conn->receiving()) {
@@ -219,7 +218,6 @@ void IceTransportChannel::_update_state() {
         }
     }
     _set_receiving(receiving);
-
     IceTransportState state = _compute_ice_transport_state();
     if (state != _state) {
         _state = state;

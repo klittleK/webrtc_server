@@ -186,6 +186,9 @@ int IceController::_compare_connections(IceConnection* a, IceConnection* b) {
 }
  
 bool IceController::ready_to_send(IceConnection* conn) {
+    if (!conn) {
+        return false;
+    }
     return conn && (conn->writable() || conn->write_state() 
             == IceConnection::STATE_WRITE_UNRELIABLE);
 }
@@ -204,12 +207,10 @@ IceConnection* IceController::sort_and_switch_connection() {
     for (auto conn : _connections) {
         RTC_LOG(LS_INFO) << conn->to_string();
     }
-     
     IceConnection* top_connection = _connections.empty() ? nullptr : _connections[0];
     if (!ready_to_send(top_connection) || _selected_connection == top_connection) {
         return nullptr;
     }
-     
     if (!_selected_connection) {
         return top_connection;
     }
@@ -217,7 +218,6 @@ IceConnection* IceController::sort_and_switch_connection() {
     if (top_connection->rtt() <= _selected_connection->rtt() - k_min_improvement) {
         return top_connection;
     }
- 
     return nullptr;
 }
  

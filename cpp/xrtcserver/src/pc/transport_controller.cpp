@@ -231,6 +231,20 @@ int TransportController::set_remote_description(SessionDescription *desc) {
                 IceParameters(td->ice_ufrag, td->ice_pwd));
             auto dtls = _get_dtls_transport(mid);
             if (dtls) {
+                
+                if (!td->identity_fingerprint) {
+                    RTC_LOG(LS_INFO) << "mid: " << mid;
+                    RTC_LOG(LS_ERROR) << "Identity fingerprint is null!";
+                    continue;
+                }
+
+                // 检查指纹数据有效性
+                const auto &digest = td->identity_fingerprint->digest;
+                if (digest.size() == 0 || !digest.data())
+                {
+                    RTC_LOG(LS_ERROR) << "Empty DTLS fingerprint digest";
+                }
+
                 dtls->set_remote_fingerprint(td->identity_fingerprint->algorithm, (const uint8_t *)td->identity_fingerprint->digest.data(), td->identity_fingerprint->digest.size());
             }
         }

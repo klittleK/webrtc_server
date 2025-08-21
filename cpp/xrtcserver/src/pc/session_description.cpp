@@ -286,7 +286,7 @@ static void build_ssrc(std::shared_ptr<MediaContentDescription> content, std::st
             add_ssrc_line(ssrc, "cname", track.cname, ss);
             add_ssrc_line(ssrc, "msid", msid, ss);
             add_ssrc_line(ssrc, "mslabel", track.stream_id, ss);
-            add_ssrc_line(ssrc, "lable", track.id, ss);
+            add_ssrc_line(ssrc, "label", track.id, ss);
         }
     }
 }

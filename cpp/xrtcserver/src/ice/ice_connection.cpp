@@ -25,6 +25,7 @@ void ConnectionRequest::prepare(StunMessage* msg) {
     _connection->port()->create_stun_username(_connection->remote_candidate().username, &username);
     msg->add_attribute(std::make_unique<StunByteStringAttribute>(STUN_ATTR_USERNAME, username));
     msg->add_attribute(std::make_unique<StunUInt64Attribute>(STUN_ATTR_ICE_CONTROLLING, 0));
+    //msg->add_attribute(std::make_unique<StunUInt64Attribute>(STUN_ATTR_ICE_CONTROLLED, 0));
     msg->add_attribute(std::make_unique<StunByteStringAttribute>(STUN_ATTR_USE_CANDIDATE, 0));
     // priority
     int type_pref = ICE_TYPE_PREFERENCE_PRFLX;
@@ -168,7 +169,6 @@ void IceConnection::fail_and_destroy() {
 void IceConnection::destroy() {
     RTC_LOG(LS_INFO) << to_string() << ": Connection destroyed";
     signal_connection_destroy(this);
-    delete this;
 }
 
 bool IceConnection::_too_many_pings_fails(size_t max_pings, int rtt, int64_t now) {
@@ -343,6 +343,9 @@ void IceConnection::ping(int64_t now) {
     _requests.send(request);
     set_state(IceCandidatePairState::IN_PROGRESS);
     _num_pings_sent++;
+
+    RTC_LOG(LS_INFO) << to_string() << ": send " 
+            << stun_method_to_string(request->type());
 }
 
 int IceConnection::send_packet(const char* data, size_t len) {

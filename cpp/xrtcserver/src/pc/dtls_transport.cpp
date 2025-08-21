@@ -228,7 +228,6 @@ bool DtlsTransport::set_local_certificate(rtc::RTCCertificate* cert) {
 
 bool DtlsTransport::set_remote_fingerprint(const std::string& digest_alg, const uint8_t* digest, size_t digest_len) {
     rtc::Buffer remote_fingerprint_value(digest, digest_len);
-    
     if (_dtls_active && _remote_fingerprint_value == remote_fingerprint_value && !digest_alg.empty()) {
         RTC_LOG(LS_INFO) << to_string() << ": Ignoring identical remote fingerprint";
         return true;
